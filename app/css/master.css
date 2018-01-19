@@ -1,0 +1,46 @@
+.strong {
+  font-weight: 800;
+}
+
+main {
+  margin-bottom: 6rem !important;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: rgb(78, 78, 78);
+}
+
+.description {
+  font-weight: 600;
+  font-size: 0.65rem;
+  color: rgb(175, 175, 175);
+  margin-top: 0.4rem;
+}
+
+.price {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: rgb(68, 68, 68);
+}
+
+.room {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: rgb(131, 131, 131);
+}
+
+.rentalStatus {
+  position: absolute !important;
+  margin-top: 1rem;
+  top: 0;
+  margin-left: 1rem;
+  font-size: 0.65rem !important;
+  padding: 0 0.65rem !important;
+  font-weight: 600 !important;
+}
+
+.card.medium.custom {
+  height: 25rem !important;
+}
