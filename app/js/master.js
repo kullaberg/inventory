@@ -1,4 +1,5 @@
 let ItemsIn = new Set();
+let AllItems = new Set();
 class item {
   constructor(name) {
     this.name = name;
@@ -6,7 +7,26 @@ class item {
       by: "new item",
       timeStamp: Date.now()
     };
+    if (!this.photo) {
+      this.photo = `
+      <div class="blue display"></div>
+      `;
+    } else {
+      this.photo = `
+      <div class="light-blue display"></div>
+      `;
+    }
+    if (this.returned) {
+      this.button = `<div onclick="window.domRefresh()" class="btn-floating halfway-fab waves-effect waves-light green">
+      <i class="material-icons">playlist_add</i>
+    </div>`;
+    } else {
+      this.button = `<div onclick="window.domRefresh()" class="btn-floating halfway-fab waves-effect waves-light green">
+      <i class="material-icons">undo</i>
+    </div>`;
+    }
     ItemsIn.add(this);
+    AllItems.add(this);
   }
 }
 
@@ -39,6 +59,7 @@ class checkOut {
     this.by = personArg.name;
     this.timeStamp = Date.now();
     Log.add(this);
+    window.domRefresh();
   }
 }
 
@@ -59,6 +80,7 @@ class checkIn {
     }
     this.timeStamp = Date.now();
     Log.add(this);
+    window.domRefresh();
   }
 }
 
@@ -103,20 +125,33 @@ class checkIn {
   }
 })();
 
+window.domRefresh = function() {
+  let equipmentDiv = document.getElementById("equipment");
+  let htmlContent = ``;
+  AllItems.forEach(
+    item =>
+      (htmlContent += `<div class="">
+  <div class="col s12 m6 l4">
+    <div class="card"> 
+    <div class="card-image">
+      ${item.photo}
+        <span class="card-title title">${item.name}</span>
+        ${item.button}
+        </div>
+      <div class="card-content">
+      </div>
+    </div>
+  </div>
+</div>`)
+  );
+  equipmentDiv.innerHTML = htmlContent;
+};
+
 // Checkouts
 new checkOut(person["Daniel Åberg"], item["Cam360"], Date.now());
-person;
 
 new checkOut(person["Carlos Velasco"], item["GoPro1"], Date.now());
 
 new checkIn(item["GoPro1"]);
-new checkOut(person["Carlos Velasco"], item["GoPro1"], Date.now());
 
-new checkIn(item["Cam360"]);
-person;
-People;
-Log;
-ItemsIn;
-ItemsOut;
-let answer = person["Carlos Velasco"].itemsCheckedOut;
-answer;
+new checkOut(person["Carlos Velasco"], item["GoPro1"], Date.now());

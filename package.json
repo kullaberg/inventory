@@ -46,6 +46,7 @@
     "material-design-icons": "^3.0.1",
     "materialize-css": "1.0.0-alpha.1",
     "materialize-loader": "^2.0.2",
+    "mongodb-stitch": "^2.3.1",
     "node-sass": "^4.7.2",
     "offline-plugin": "^4.8.5",
     "postcss": "^6.0.14",

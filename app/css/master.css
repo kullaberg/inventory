@@ -6,9 +6,9 @@ main {
   margin-bottom: 6rem !important;
 }
 
-.title {
-  font-weight: 500;
-  font-size: 0.8rem;
+.card-title.title {
+  font-weight: 300;
+  font-size: 1.4rem;
   color: rgb(78, 78, 78);
 }
 
@@ -43,4 +43,8 @@ main {
 
 .card.medium.custom {
   height: 25rem !important;
+}
+
+.display {
+  height: 12rem;
 }
