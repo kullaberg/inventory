@@ -1,8 +1,3 @@
-//@ts-check
-
-// import { item } from "./item";
-// import { person } from "./person";
-
 let ItemsIn = new Set();
 class item {
   constructor(name) {
@@ -67,42 +62,47 @@ class checkIn {
   }
 }
 
-//Equipment
-let equipmentList = [
-  "GoPro1",
-  "GoPro2",
-  "GoPro3",
-  "Drone",
-  "Cam360",
-  "Car"
-];
-for (let i in equipmentList) {
-  let name = equipmentList[i];
-  item[name] = new item(equipmentList[i]);
-}
+// Populate Equipment
+(function() {
+  let equipmentList = [
+    "GoPro1",
+    "GoPro2",
+    "GoPro3",
+    "Drone",
+    "Cam360",
+    "Car"
+  ];
+  for (let i in equipmentList) {
+    let name = equipmentList[i];
+    item[name] = new item(equipmentList[i]);
+  }
+})();
 
-//People
-let peopleList = [
-  "Carlos Velasco",
-  "Daniel Åberg",
-  "Malin Melén",
-  "Johanna Stedt",
-  "Mia Kristersson",
-  "Peter Ovgren",
-  "Laura Parsons",
-  "Jimena Castillo",
-  "Elena Bazhenova",
-  "Per-Inge Persson",
-  "Mats Sjöberg",
-  "Svarrer Cornelius",
-  "Helen Thorn Jönsson",
-  "Freddy Kristensson"
-];
+// Pupulate People
+(function() {
+  let peopleList = [
+    "Carlos Velasco",
+    "Daniel Åberg",
+    "Malin Melén",
+    "Johanna Stedt",
+    "Mia Kristersson",
+    "Peter Ovgren",
+    "Laura Parsons",
+    "Jimena Castillo",
+    "Elena Bazhenova",
+    "Per-Inge Persson",
+    "Mats Sjöberg",
+    "Svarrer Cornelius",
+    "Helen Thorn Jönsson",
+    "Freddy Kristensson"
+  ];
 
-for (let i in peopleList) {
-  let name = peopleList[i];
-  person[name] = new person(peopleList[i]);
-}
+  for (let i in peopleList) {
+    let name = peopleList[i];
+    person[name] = new person(peopleList[i]);
+  }
+})();
+
 // Checkouts
 new checkOut(person["Daniel Åberg"], item["Cam360"], Date.now());
 person;
