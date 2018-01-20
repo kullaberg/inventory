@@ -17,12 +17,16 @@ class item {
     let item = {};
 
     if (!this.returned === false) {
-      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light purple lighten-1">
+      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating halfway-fab purple lighten-1">
       <i class="material-icons">playlist_add</i>
     </a>`;
-    } else {
-      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light orange lighten-1">
+    } else if (window.userName === this.checkedOut.by) {
+      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating halfway-fab orange lighten-1">
       <i class="material-icons">undo</i>
+    </a>`;
+    } else {
+      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab disabled purple lighten-1">
+      <i class="material-icons">playlist_add</i>
     </a>`;
     }
     let htmlContent =
@@ -36,7 +40,7 @@ class item {
         </div>
       <div class="card-content">
       <p>
-      ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
+      ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.time).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
       </p>
       </div>
     </div>
@@ -49,17 +53,10 @@ class item {
   cardRender() {
     let domElement = document.getElementById(this.name)
     domElement.outerHTML = this.cardHtml();
-    // let button = document.getElementById('button' + this.name)
-    // if (this.returned) {
-    //   button.addEventListener('click', window.item[this.name].checkOut)
-    //   // button.addEventListener('click', this.checkOut)
-    // } else {
-    //   button.addEventListener('click', window.item[this.name].checkIn)
-    // }
   }
 
   checkOut(user = window.userName) {
-    new checkOut(person[user], window.item[this.name], Date.now());
+    new checkOut(person[user], window.item[this.name]);
   }
 
   checkIn() {
@@ -79,12 +76,11 @@ class person {
 let Log = new Set();
 let ItemsOut = new Set();
 class checkOut {
-  constructor(personArg, itemArg, willReturn) {
+  constructor(personArg, itemArg) {
     if (ItemsIn.has(itemArg)) {
       itemArg.checkedOut = {
         by: personArg.name,
-        on: Date.now(),
-        nextAvailable: willReturn
+        time: Date.now(),
       };
       personArg.itemsCheckedOut.add(itemArg);
       ItemsIn.delete(itemArg);
@@ -145,7 +141,7 @@ class checkIn {
   let nameFound = false;
 
   while (!nameFound) {
-    window.userName = window.prompt('Hej! What is your name?', 'First Last');
+    window.userName = window.prompt('Hej! What is your name?', 'Carlos Velasco');
     nameFound = peopleList.includes(window.userName);
   }
 
@@ -184,13 +180,5 @@ window.item = item;
   equipmentDiv.innerHTML = htmlContent;
 })();
 
-
-// Checkouts
-item["Cam360"].checkOut("Daniel Åberg");
-item["Drone"].checkOut("Daniel Åberg");
-item["GoPro1"].checkOut('Carlos Velasco');
-item["GoPro3"].checkOut('Carlos Velasco');
-
-item["GoPro1"].checkIn();
-
-
+window.item["GoPro1"].checkOut('Johanna Stedt');
+window.item["Cam360"].checkOut('Johanna Stedt');
