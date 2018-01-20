@@ -7,26 +7,64 @@ class item {
       by: "new item",
       timeStamp: Date.now()
     };
-    if (!this.photo) {
-      this.photo = `
-      <div class="blue display"></div>
-      `;
-    } else {
-      this.photo = `
-      <div class="light-blue display"></div>
-      `;
-    }
-    if (this.returned) {
-      this.button = `<div onclick="window.domRefresh()" class="btn-floating halfway-fab waves-effect waves-light green">
-      <i class="material-icons">playlist_add</i>
-    </div>`;
-    } else {
-      this.button = `<div onclick="window.domRefresh()" class="btn-floating halfway-fab waves-effect waves-light green">
-      <i class="material-icons">undo</i>
-    </div>`;
-    }
+
     ItemsIn.add(this);
     AllItems.add(this);
+  }
+
+  cardHtml() {
+    let item = {};
+
+    if (this.returned) {
+      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light green lighten-1">
+      <i class="material-icons">playlist_add</i>
+    </a>`;
+    } else {
+      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light orange lighten-1">
+      <i class="material-icons">undo</i>
+    </a>`;
+    }
+    let htmlContent =
+      `<div id="${this.name}">
+  <div class="col s12 m6 l4">
+    <div class="card"> 
+    <div class="card-image">
+      ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
+        <span class="card-title title">${this.name}</span>
+        ${item.button}
+        </div>
+      <div class="card-content">
+      <p>
+      ${(this.checkedOut ? '<div class="chip"><i class="material-icons tiny">person</i>' + this.checkedOut.by + '</div>' + '<div class="chip"><i class="material-icons tiny">undo</i>' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip"> <i class="material-icons tiny">check</i>Available</div>')}
+      </p>
+      </div>
+    </div>
+  </div>
+</div> `
+    this.card = htmlContent;
+    return htmlContent;
+  }
+
+  cardRender() {
+    let domElement = document.getElementById(this.name)
+    domElement.outerHTML = this.cardHtml();
+    domElement.addEventListener('click', this.action())
+  }
+
+  action(personString) {
+    if (this.returned) {
+      return this.checkOut(personString)
+    } else {
+      return this.checkIn();
+    }
+  }
+
+  checkOut(personString) {
+    new checkOut(person[personString], this, Date.now())
+  }
+
+  checkIn() {
+    new checkIn(this);
   }
 }
 
@@ -59,7 +97,6 @@ class checkOut {
     this.by = personArg.name;
     this.timeStamp = Date.now();
     Log.add(this);
-    window.domRefresh();
   }
 }
 
@@ -80,12 +117,11 @@ class checkIn {
     }
     this.timeStamp = Date.now();
     Log.add(this);
-    window.domRefresh();
   }
 }
 
 // Populate Equipment
-(function() {
+(function () {
   let equipmentList = [
     "GoPro1",
     "GoPro2",
@@ -101,7 +137,7 @@ class checkIn {
 })();
 
 // Pupulate People
-(function() {
+(function () {
   let peopleList = [
     "Carlos Velasco",
     "Daniel Åberg",
@@ -125,33 +161,23 @@ class checkIn {
   }
 })();
 
-window.domRefresh = function() {
+let populateDom = function () {
   let equipmentDiv = document.getElementById("equipment");
   let htmlContent = ``;
   AllItems.forEach(
     item =>
-      (htmlContent += `<div class="">
-  <div class="col s12 m6 l4">
-    <div class="card"> 
-    <div class="card-image">
-      ${item.photo}
-        <span class="card-title title">${item.name}</span>
-        ${item.button}
-        </div>
-      <div class="card-content">
-      </div>
-    </div>
-  </div>
-</div>`)
+      (htmlContent += item.cardHtml())
   );
   equipmentDiv.innerHTML = htmlContent;
 };
 
+
+
 // Checkouts
-new checkOut(person["Daniel Åberg"], item["Cam360"], Date.now());
+item["Cam360"].checkOut("Daniel Åberg");
+item["GoPro1"].checkOut('Carlos Velasco');
 
-new checkOut(person["Carlos Velasco"], item["GoPro1"], Date.now());
+item["GoPro1"].checkIn();
 
-new checkIn(item["GoPro1"]);
+populateDom();
 
-new checkOut(person["Carlos Velasco"], item["GoPro1"], Date.now());
