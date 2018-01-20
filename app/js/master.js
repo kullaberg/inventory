@@ -1,3 +1,5 @@
+window.userName = 'Carlos Velasco'
+
 let ItemsIn = new Set();
 let AllItems = new Set();
 class item {
@@ -15,12 +17,12 @@ class item {
   cardHtml() {
     let item = {};
 
-    if (this.returned) {
-      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light green lighten-1">
+    if (!this.returned === false) {
+      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light purple lighten-1">
       <i class="material-icons">playlist_add</i>
     </a>`;
     } else {
-      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light orange lighten-1">
+      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating halfway-fab waves-effect waves-light orange lighten-1">
       <i class="material-icons">undo</i>
     </a>`;
     }
@@ -35,36 +37,34 @@ class item {
         </div>
       <div class="card-content">
       <p>
-      ${(this.checkedOut ? '<div class="chip"><i class="material-icons tiny">person</i>' + this.checkedOut.by + '</div>' + '<div class="chip"><i class="material-icons tiny">undo</i>' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip"> <i class="material-icons tiny">check</i>Available</div>')}
+      ${(this.checkedOut ? '<div class="chip"><i class="material-icons left">person</i>' + this.checkedOut.by + '</div>' + '<div class="chip"><i class="material-icons right">undo</i>' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip"> <i class="material-icons">check</i></div>')}
       </p>
       </div>
     </div>
   </div>
 </div> `
-    this.card = htmlContent;
+
     return htmlContent;
   }
 
   cardRender() {
     let domElement = document.getElementById(this.name)
     domElement.outerHTML = this.cardHtml();
-    domElement.addEventListener('click', this.action())
+    // let button = document.getElementById('button' + this.name)
+    // if (this.returned) {
+    //   button.addEventListener('click', window.item[this.name].checkOut)
+    //   // button.addEventListener('click', this.checkOut)
+    // } else {
+    //   button.addEventListener('click', window.item[this.name].checkIn)
+    // }
   }
 
-  action(personString) {
-    if (this.returned) {
-      return this.checkOut(personString)
-    } else {
-      return this.checkIn();
-    }
-  }
-
-  checkOut(personString) {
-    new checkOut(person[personString], this, Date.now())
+  checkOut(user = window.userName) {
+    new checkOut(person[user], window.item[this.name], Date.now());
   }
 
   checkIn() {
-    new checkIn(this);
+    new checkIn(window.item[this.name]);
   }
 }
 
@@ -94,6 +94,7 @@ class checkOut {
     if (itemArg.returned) {
       delete itemArg.returned;
     }
+    itemArg.cardRender();
     this.by = personArg.name;
     this.timeStamp = Date.now();
     Log.add(this);
@@ -115,6 +116,7 @@ class checkIn {
       ItemsIn.add(itemArg);
       this.by = itemArg.returned.by;
     }
+    itemArg.cardRender();
     this.timeStamp = Date.now();
     Log.add(this);
   }
@@ -135,6 +137,8 @@ class checkIn {
     item[name] = new item(equipmentList[i]);
   }
 })();
+
+window.item = item;
 
 // Pupulate People
 (function () {
@@ -161,7 +165,8 @@ class checkIn {
   }
 })();
 
-let populateDom = function () {
+// Populate DOM
+(function () {
   let equipmentDiv = document.getElementById("equipment");
   let htmlContent = ``;
   AllItems.forEach(
@@ -169,15 +174,15 @@ let populateDom = function () {
       (htmlContent += item.cardHtml())
   );
   equipmentDiv.innerHTML = htmlContent;
-};
-
+})();
 
 
 // Checkouts
 item["Cam360"].checkOut("Daniel Åberg");
+item["Drone"].checkOut("Daniel Åberg");
 item["GoPro1"].checkOut('Carlos Velasco');
+item["GoPro3"].checkOut('Carlos Velasco');
 
 item["GoPro1"].checkIn();
 
-populateDom();
 
