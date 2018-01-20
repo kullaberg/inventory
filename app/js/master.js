@@ -1,10 +1,9 @@
-window.userName = 'Carlos Velasco'
-
 let ItemsIn = new Set();
 let AllItems = new Set();
 class item {
-  constructor(name) {
+  constructor(name, location) {
     this.name = name;
+    this.location = location;
     this.returned = {
       by: "new item",
       timeStamp: Date.now()
@@ -28,7 +27,7 @@ class item {
     }
     let htmlContent =
       `<div id="${this.name}">
-  <div class="col s12 m6 l4">
+  <div class="col s12 m6 l3">
     <div class="card"> 
     <div class="card-image">
       ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
@@ -37,7 +36,7 @@ class item {
         </div>
       <div class="card-content">
       <p>
-      ${(this.checkedOut ? '<div class="chip"><i class="material-icons left">person</i>' + this.checkedOut.by + '</div>' + '<div class="chip"><i class="material-icons right">undo</i>' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip"> <i class="material-icons">check</i></div>')}
+      ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.nextAvailable).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
       </p>
       </div>
     </div>
@@ -122,26 +121,10 @@ class checkIn {
   }
 }
 
-// Populate Equipment
-(function () {
-  let equipmentList = [
-    "GoPro1",
-    "GoPro2",
-    "GoPro3",
-    "Drone",
-    "Cam360",
-    "Car"
-  ];
-  for (let i in equipmentList) {
-    let name = equipmentList[i];
-    item[name] = new item(equipmentList[i]);
-  }
-})();
-
-window.item = item;
 
 // Pupulate People
 (function () {
+
   let peopleList = [
     "Carlos Velasco",
     "Daniel Åberg",
@@ -159,12 +142,37 @@ window.item = item;
     "Freddy Kristensson"
   ];
 
+  let nameFound = false;
+
+  while (!nameFound) {
+    window.userName = window.prompt('Hej! What is your name?', 'First Last');
+    nameFound = peopleList.includes(window.userName);
+  }
+
+
   for (let i in peopleList) {
     let name = peopleList[i];
     person[name] = new person(peopleList[i]);
   }
 })();
 
+// Populate Equipment
+(function () {
+  let equipmentList = [
+    "GoPro1",
+    "GoPro2",
+    "GoPro3",
+    "Drone",
+    "Cam360",
+    "Car"
+  ];
+  for (let i in equipmentList) {
+    let name = equipmentList[i];
+    item[name] = new item(equipmentList[i], 'Naturum');
+  }
+})();
+
+window.item = item;
 // Populate DOM
 (function () {
   let equipmentDiv = document.getElementById("equipment");
