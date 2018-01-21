@@ -5,7 +5,7 @@ main {
 .card-title.title {
   font-weight: 400;
   font-size: 1.6rem;
-  color: rgb(78, 78, 78);
+  /* color: rgb(78, 78, 78); */
 }
 
 .description {

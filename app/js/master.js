@@ -1,13 +1,13 @@
 let ItemsIn = new Set();
 let AllItems = new Set();
 
+/**
+ * Creates an instance of item.
+ * @param {string} [itemParams=['Name', 'Model', 1]] 
+ * @param {any} location 
+ * @memberof item
+ */
 class item {
-  /**
-   * Creates an instance of item.
-   * @param {any} name 
-   * @param {any} location 
-   * @memberof item
-   */
   constructor(itemParams = ['Name', 'Model', 1], location) {
     this.brand = itemParams[0];
     this.model = itemParams[1];
@@ -185,10 +185,10 @@ class checkIn {
     ["Yosemite", "MTB Electric Bike", 1],
     ["Yosemite", "MTB Electric Bike", 2],
     ["Yosemite", "MTB Electric Bike", 3],
-    ["Yosemite", "Road Electric Bike", 1],
+    ["Yosemite", "Road Electric Bike", 4],
   ];
   for (let i in equipmentList) {
-    let name = equipmentList[i];
+    let name = equipmentList[i][0] + equipmentList[i][2];
     item[name] = new item(equipmentList[i], 'Naturum');
   }
 })();
