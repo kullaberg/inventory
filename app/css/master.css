@@ -15,5 +15,13 @@ main {
 }
 
 .display {
-  height: 12rem;
+  height: 10rem;
+}
+
+div.card-content{
+  padding: 10px 24px !important;
+}
+
+div.card-action{
+  padding: 10px 24px !important;
 }
