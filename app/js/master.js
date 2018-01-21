@@ -8,8 +8,12 @@ class item {
    * @param {any} location 
    * @memberof item
    */
-  constructor(name, location) {
-    this.name = name;
+  constructor(itemParams = ['Name', 'Model', 1], location) {
+    this.brand = itemParams[0];
+    this.model = itemParams[1];
+    this.idNumber = itemParams[2];
+    this.description = `${this.brand} ${this.model} #${this.idNumber}`;
+    this.name = `${this.brand}${this.idNumber}`;
     this.location = location;
     this.returned = {
       by: "new item",
@@ -26,29 +30,32 @@ class item {
     if (!this.returned === false) {
       item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating btn-large halfway-fab purple lighten-1">
       <i class="material-icons large">playlist_add</i>
-    </a>`;
+    </a > `;
     } else if (window.userName === this.checkedOut.by) {
-      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating btn-large halfway-fab orange lighten-1">
+      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating btn-large halfway-fab orange lighten-1" >
       <i class="material-icons large">undo</i>
-    </a>`;
+    </a > `;
     } else {
-      item.button = `<a id="button${this.name}" class="btn-floating btn-large halfway-fab disabled purple lighten-1">
+      item.button = `<a id="button${this.name}" class="btn-floating btn-large halfway-fab disabled purple lighten-1" >
       <i class="material-icons large">playlist_add</i>
-    </a>`;
+    </a > `;
     }
     let htmlContent =
       `<div id="${this.name}" class="col s12 m6 l3">
-    <div class="card"> 
-    <div class="card-image">
-      ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
-        <span class="card-title title">${this.name}</span>
-        ${item.button}
+      <div class="card">
+        <div class="card-image">
+          ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
+          <span class="card-title title">${this.model}</span>
+          ${item.button}
         </div>
-      <div class="card-action">
-      ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.time).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
+        <div class="card-content grey-text text-lighten description">
+          <p>${this.description}</p>
+        </div>
+        <div class="card-action">
+          ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.time).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
+        </div>
       </div>
-    </div>
-</div> `
+</div > `
 
     return htmlContent;
   }
@@ -169,12 +176,16 @@ class checkIn {
 // Populate Equipment
 (function () {
   let equipmentList = [
-    "GoPro1",
-    "GoPro2",
-    "GoPro3",
-    "Drone",
-    "Cam360",
-    "Car"
+    ["GoPro", "Hero 2 Silver Camera", 1],
+    ["GoPro", "Hero 2 Silver Camera", 2],
+    ["GoPro", "Hero 2 Silver Camera", 3],
+    ["DJI", "Phantom 3 4K Drone", 1],
+    ["Nikon", "Keymission 360 Camera", 1],
+    ["Opel", "White Car", 1],
+    ["Yosemite", "MTB Electric Bike", 1],
+    ["Yosemite", "MTB Electric Bike", 2],
+    ["Yosemite", "MTB Electric Bike", 3],
+    ["Yosemite", "Road Electric Bike", 1],
   ];
   for (let i in equipmentList) {
     let name = equipmentList[i];
@@ -193,6 +204,3 @@ window.item = item;
   );
   equipmentDiv.innerHTML = htmlContent;
 })();
-
-window.item["GoPro1"].checkOut('Johanna Stedt');
-window.item["Cam360"].checkOut('Johanna Stedt');
