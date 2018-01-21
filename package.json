@@ -35,7 +35,7 @@
     "css-loader": "^0.28.7",
     "cssnano": "^3.10.0",
     "cssnano-preset-advanced": "^4.0.0-rc.2",
-    "eslint": "^4.13.1",
+    "eslint": "^4.16.0",
     "extract-loader": "^1.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
@@ -61,6 +61,6 @@
     "uncss": "^0.16.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.9.7"
+    "webpack-dev-server": "^2.11.1"
   }
 }

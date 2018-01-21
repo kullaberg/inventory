@@ -1,6 +1,13 @@
 let ItemsIn = new Set();
 let AllItems = new Set();
+
 class item {
+  /**
+   * Creates an instance of item.
+   * @param {any} name 
+   * @param {any} location 
+   * @memberof item
+   */
   constructor(name, location) {
     this.name = name;
     this.location = location;
@@ -17,34 +24,30 @@ class item {
     let item = {};
 
     if (!this.returned === false) {
-      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating halfway-fab purple lighten-1">
-      <i class="material-icons">playlist_add</i>
+      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating btn-large halfway-fab purple lighten-1">
+      <i class="material-icons large">playlist_add</i>
     </a>`;
     } else if (window.userName === this.checkedOut.by) {
-      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating halfway-fab orange lighten-1">
-      <i class="material-icons">undo</i>
+      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating btn-large halfway-fab orange lighten-1">
+      <i class="material-icons large">undo</i>
     </a>`;
     } else {
-      item.button = `<a id="button${this.name}" class="btn-floating halfway-fab disabled purple lighten-1">
-      <i class="material-icons">playlist_add</i>
+      item.button = `<a id="button${this.name}" class="btn-floating btn-large halfway-fab disabled purple lighten-1">
+      <i class="material-icons large">playlist_add</i>
     </a>`;
     }
     let htmlContent =
-      `<div id="${this.name}">
-  <div class="col s12 m6 l3">
+      `<div id="${this.name}" class="col s12 m6 l3">
     <div class="card"> 
     <div class="card-image">
       ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
         <span class="card-title title">${this.name}</span>
         ${item.button}
         </div>
-      <div class="card-content">
-      <p>
+      <div class="card-action">
       ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.time).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
-      </p>
       </div>
     </div>
-  </div>
 </div> `
 
     return htmlContent;
@@ -76,6 +79,12 @@ class person {
 let Log = new Set();
 let ItemsOut = new Set();
 class checkOut {
+  /**
+   * Creates an instance of checkOut.
+   * @param {any} personArg 
+   * @param {any} itemArg 
+   * @memberof checkOut
+   */
   constructor(personArg, itemArg) {
     if (ItemsIn.has(itemArg)) {
       itemArg.checkedOut = {
@@ -97,6 +106,11 @@ class checkOut {
 }
 
 class checkIn {
+  /**
+   * Creates an instance of checkIn.
+   * @param {any} itemArg 
+   * @memberof checkIn
+   */
   constructor(itemArg) {
     if (ItemsOut.has(itemArg)) {
       let personWithItem = itemArg.checkedOut.by;
