@@ -15,7 +15,7 @@ main {
 }
 
 .display {
-  height: 10rem;
+  height: 9rem;
 }
 
 div.card-content{
@@ -32,4 +32,8 @@ font-size: 11px;
 line-height: 20px;
 padding: 0 8px;
 font-weight: 500;
+}
+
+.card .card-image span.card-title.title{
+  padding: 6px 24px;
 }
