@@ -8,11 +8,12 @@ let AllItems = new Set();
  * @memberof item
  */
 class item {
-  constructor(itemParams = ['Name', 'Model', 1], location) {
+  constructor(itemParams = ['Name', 'Model', 'Type', 1], location) {
     this.brand = itemParams[0];
     this.model = itemParams[1];
-    this.idNumber = itemParams[2];
-    this.description = `${this.brand} ${this.model} #${this.idNumber}`;
+    this.type = itemParams[2];
+    this.idNumber = itemParams[3];
+    this.description = `${this.brand} ${this.model} ${this.type} #${this.idNumber}`;
     this.name = `${this.brand}${this.idNumber}`;
     this.location = location;
     this.returned = {
@@ -45,7 +46,7 @@ class item {
       <div class="card">
         <div class="card-image">
           ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
-          <span class="card-title title">${this.model}</span>
+          <span class="card-title title">${this.brand} ${this.type}</span>
           ${item.button}
         </div>
         <div class="card-content grey-text text-lighten description">
@@ -176,19 +177,19 @@ class checkIn {
 // Populate Equipment
 (function () {
   let equipmentList = [
-    ["GoPro", "Hero 2 Silver Camera", 1],
-    ["GoPro", "Hero 2 Silver Camera", 2],
-    ["GoPro", "Hero 2 Silver Camera", 3],
-    ["DJI", "Phantom 3 4K Drone", 1],
-    ["Nikon", "Keymission 360 Camera", 1],
-    ["Opel", "White Car", 1],
-    ["Yosemite", "MTB Electric Bike", 1],
-    ["Yosemite", "MTB Electric Bike", 2],
-    ["Yosemite", "MTB Electric Bike", 3],
-    ["Yosemite", "Road Electric Bike", 4],
+    ["GoPro", "Hero 2 Silver", "Camera", 1],
+    ["GoPro", "Hero 2 Silver", "Camera", 2],
+    ["GoPro", "Hero 2 Silver", "Camera", 3],
+    ["DJI", "Phantom 3 4K", "Drone", 1],
+    ["Nikon", "Keymission 360", "Camera", 1],
+    ["Opel", "White", "Car", 1],
+    ["Yosemite", "MTB", "eBike", 1],
+    ["Yosemite", "MTB", "eBike", 2],
+    ["Yosemite", "MTB", "eBike", 3],
+    ["Yosemite", "Road", "eBike", 4],
   ];
   for (let i in equipmentList) {
-    let name = equipmentList[i][0] + equipmentList[i][2];
+    let name = equipmentList[i][0] + equipmentList[i][3];
     item[name] = new item(equipmentList[i], 'Naturum');
   }
 })();
