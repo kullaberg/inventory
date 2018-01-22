@@ -35,7 +35,7 @@ class item {
         this.name
       }'].checkOut()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab purple lighten-1">
+      }" class="btn-floating btn-large halfway-fab purple lighten-1 scale-transition">
       <i class="material-icons large">playlist_add</i>
     </a > `;
     } else if (window.userName === this.checkedOut.by) {
@@ -43,13 +43,13 @@ class item {
         this.name
       }'].checkIn()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab orange lighten-1" >
+      }" class="btn-floating btn-large halfway-fab orange lighten-1 scale-transition" >
       <i class="material-icons large">undo</i>
     </a > `;
     } else {
       item.button = `<a id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab disabled purple lighten-1" >
+      }" class="btn-floating btn-large halfway-fab disabled purple lighten-1 scale-transition" >
       <i class="material-icons large">playlist_add</i>
     </a > `;
     }
@@ -86,8 +86,18 @@ class item {
   }
 
   cardRender() {
+    let domButton = document.getElementById("button" + this.name);
+    domButton.classList.remove("scale-in");
+    domButton.classList.add("scale-out");
     let domElement = document.getElementById(this.name);
-    domElement.outerHTML = this.cardHtml();
+    setTimeout(() => {
+      domElement.outerHTML = this.cardHtml();
+      let domButton = document.getElementById("button" + this.name);
+      domButton.classList.add("scale-out");
+      setTimeout(() => {
+        domButton.classList.add("scale-in");
+      }, 100);
+    }, 100);
   }
 
   checkOut(user = window.userName) {
