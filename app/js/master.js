@@ -177,7 +177,7 @@ class checkIn {
     "Elena Bazhenova",
     "Per-Inge Persson",
     "Mats Sjöberg",
-    "Svarrer Cornelius",
+    "Cornelius Svarrer",
     "Helen Thorn Jönsson",
     "Freddy Kristensson"
   ];
@@ -232,7 +232,7 @@ window.item = item;
 })();
 
 window.item["Yosemite1"].checkOut("Carlos Velasco");
-window.item["Yosemite2"].checkOut("Svarrer Cornelius");
+window.item["Yosemite2"].checkOut("Cornelius Svarrer");
 window.item["GoPro3"].checkOut("Daniel Åberg");
 window.item["Nikon1"].checkOut("Daniel Åberg");
 window.item["Opel3"].checkOut("Daniel Åberg");
