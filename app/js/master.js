@@ -8,16 +8,16 @@ let AllItems = new Set();
  * @memberof item
  */
 class item {
-  constructor(itemParams = ["Name", "Model", "Type", 1], location) {
+  constructor(itemParams = ["Name", "Model", "Type", "Location", 1]) {
     this.brand = itemParams[0];
     this.model = itemParams[1];
     this.type = itemParams[2];
-    this.idNumber = itemParams[3];
+    this.location = itemParams[3];
+    this.idNumber = itemParams[4];
     this.description = `${this.brand} ${this.model} ${this.type} #${
       this.idNumber
     }`;
     this.name = `${this.brand}${this.idNumber}`;
-    this.location = location;
     this.returned = {
       by: "new item",
       timeStamp: Date.now()
@@ -201,21 +201,23 @@ class checkIn {
 // Populate Equipment
 (function() {
   let equipmentList = [
-    ["GoPro", "Hero 2 Silver", "Camera", 1],
-    ["GoPro", "Hero 2 Silver", "Camera", 2],
-    ["GoPro", "Hero 2 Silver", "Camera", 3],
-    ["DJI", "Phantom 3 4K", "Drone", 1],
-    ["Nikon", "Keymission 360", "Camera", 1],
-    ["Opel", "White", "Car", 1],
-    ["Yosemite", "MTB", "eBike", 1],
-    ["Yosemite", "MTB", "eBike", 2],
-    ["Yosemite", "MTB", "eBike", 3],
-    ["Yosemite", "Road", "eBike", 4],
-    ["Segway", "X2 SE", "All-Terrain Scooter", 1]
+    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
+    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
+    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
+    ["DJI", "Phantom 3 4K", "Drone", "Naturum Loft", 1],
+    ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
+    ["Opel", "White", "Car", "Naturum Parkering", 1],
+    ["Opel", "White", "Car", "Förvaltning Parkering", 2],
+    ["Yosemite", "MTB", "eBike", "Förvaltning", 1],
+    ["Yosemite", "MTB", "eBike", "Förvaltning", 2],
+    ["Yosemite", "MTB", "eBike", "Förvaltning", 3],
+    ["Yosemite", "Road", "eBike", "Naturum Pannrum", 4],
+    ["FatBike", "MTB", "eBike", "Naturum Pannrum", 1],
+    ["Segway", "X2 SE", "All-Terrain Scooter", "Naturum Pannrum", 1]
   ];
   for (let i in equipmentList) {
-    let name = equipmentList[i][0] + equipmentList[i][3];
-    item[name] = new item(equipmentList[i], "Naturum");
+    let name = equipmentList[i][0] + equipmentList[i][4];
+    item[name] = new item(equipmentList[i]);
   }
 })();
 
