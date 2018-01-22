@@ -3,17 +3,19 @@ let AllItems = new Set();
 
 /**
  * Creates an instance of item.
- * @param {string} [itemParams=['Name', 'Model', 1]] 
- * @param {any} location 
+ * @param {string} [itemParams=['Name', 'Model', 1]]
+ * @param {any} location
  * @memberof item
  */
 class item {
-  constructor(itemParams = ['Name', 'Model', 'Type', 1], location) {
+  constructor(itemParams = ["Name", "Model", "Type", 1], location) {
     this.brand = itemParams[0];
     this.model = itemParams[1];
     this.type = itemParams[2];
     this.idNumber = itemParams[3];
-    this.description = `${this.brand} ${this.model} ${this.type} #${this.idNumber}`;
+    this.description = `${this.brand} ${this.model} ${this.type} #${
+      this.idNumber
+    }`;
     this.name = `${this.brand}${this.idNumber}`;
     this.location = location;
     this.returned = {
@@ -29,23 +31,36 @@ class item {
     let item = {};
 
     if (!this.returned === false) {
-      item.button = `<a onclick="window.item['${this.name}'].checkOut()" id="button${this.name}" class="btn-floating btn-large halfway-fab purple lighten-1">
+      item.button = `<a onclick="window.item['${
+        this.name
+      }'].checkOut()" id="button${
+        this.name
+      }" class="btn-floating btn-large halfway-fab purple lighten-1">
       <i class="material-icons large">playlist_add</i>
     </a > `;
     } else if (window.userName === this.checkedOut.by) {
-      item.button = `<a onclick="window.item['${this.name}'].checkIn()" id="button${this.name}" class="btn-floating btn-large halfway-fab orange lighten-1" >
+      item.button = `<a onclick="window.item['${
+        this.name
+      }'].checkIn()" id="button${
+        this.name
+      }" class="btn-floating btn-large halfway-fab orange lighten-1" >
       <i class="material-icons large">undo</i>
     </a > `;
     } else {
-      item.button = `<a id="button${this.name}" class="btn-floating btn-large halfway-fab disabled purple lighten-1" >
+      item.button = `<a id="button${
+        this.name
+      }" class="btn-floating btn-large halfway-fab disabled purple lighten-1" >
       <i class="material-icons large">playlist_add</i>
     </a > `;
     }
-    let htmlContent =
-      `<div id="${this.name}" class="col s12 m6 l3">
+    let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
       <div class="card">
         <div class="card-image">
-          ${(!this.photo ? '<div class="blue lighten-2 display"></div>' : this.photo)}
+          ${
+            !this.photo
+              ? '<div class="blue lighten-2 display"></div>'
+              : this.photo
+          }
           <span class="card-title title">${this.brand} ${this.type}</span>
           ${item.button}
         </div>
@@ -53,16 +68,25 @@ class item {
           <p>${this.description}</p>
         </div>
         <div class="card-action">
-          ${(this.checkedOut ? '<div class="chip">' + this.checkedOut.by + '</div>' + '<div class="chip">' + new Date(this.checkedOut.time).toLocaleDateString() + '</div>' : '<div class="chip">' + this.location + '</div>')}
+          ${
+            this.checkedOut
+              ? '<div class="chip">' +
+                this.checkedOut.by +
+                "</div>" +
+                '<div class="chip">' +
+                new Date(this.checkedOut.time).toLocaleDateString() +
+                "</div>"
+              : '<div class="chip">' + this.location + "</div>"
+          }
         </div>
       </div>
-</div > `
+</div > `;
 
     return htmlContent;
   }
 
   cardRender() {
-    let domElement = document.getElementById(this.name)
+    let domElement = document.getElementById(this.name);
     domElement.outerHTML = this.cardHtml();
   }
 
@@ -89,15 +113,15 @@ let ItemsOut = new Set();
 class checkOut {
   /**
    * Creates an instance of checkOut.
-   * @param {any} personArg 
-   * @param {any} itemArg 
+   * @param {any} personArg
+   * @param {any} itemArg
    * @memberof checkOut
    */
   constructor(personArg, itemArg) {
     if (ItemsIn.has(itemArg)) {
       itemArg.checkedOut = {
         by: personArg.name,
-        time: Date.now(),
+        time: Date.now()
       };
       personArg.itemsCheckedOut.add(itemArg);
       ItemsIn.delete(itemArg);
@@ -116,7 +140,7 @@ class checkOut {
 class checkIn {
   /**
    * Creates an instance of checkIn.
-   * @param {any} itemArg 
+   * @param {any} itemArg
    * @memberof checkIn
    */
   constructor(itemArg) {
@@ -139,10 +163,8 @@ class checkIn {
   }
 }
 
-
 // Pupulate People
-(function () {
-
+(function() {
   let peopleList = [
     "Carlos Velasco",
     "Daniel Åberg",
@@ -163,10 +185,12 @@ class checkIn {
   let nameFound = false;
 
   while (!nameFound) {
-    window.userName = window.prompt('Hej! What is your name?', 'Carlos Velasco');
+    window.userName = window.prompt(
+      "Hej! What is your name? (You can also use my name as a test.)",
+      "Carlos Velasco"
+    );
     nameFound = peopleList.includes(window.userName);
   }
-
 
   for (let i in peopleList) {
     let name = peopleList[i];
@@ -175,7 +199,7 @@ class checkIn {
 })();
 
 // Populate Equipment
-(function () {
+(function() {
   let equipmentList = [
     ["GoPro", "Hero 2 Silver", "Camera", 1],
     ["GoPro", "Hero 2 Silver", "Camera", 2],
@@ -187,21 +211,19 @@ class checkIn {
     ["Yosemite", "MTB", "eBike", 2],
     ["Yosemite", "MTB", "eBike", 3],
     ["Yosemite", "Road", "eBike", 4],
+    ["Segway", "X2 SE", "All-Terrain Scooter", 1]
   ];
   for (let i in equipmentList) {
     let name = equipmentList[i][0] + equipmentList[i][3];
-    item[name] = new item(equipmentList[i], 'Naturum');
+    item[name] = new item(equipmentList[i], "Naturum");
   }
 })();
 
 window.item = item;
 // Populate DOM
-(function () {
+(function() {
   let equipmentDiv = document.getElementById("equipment");
   let htmlContent = ``;
-  AllItems.forEach(
-    item =>
-      (htmlContent += item.cardHtml())
-  );
+  AllItems.forEach(item => (htmlContent += item.cardHtml()));
   equipmentDiv.innerHTML = htmlContent;
 })();
