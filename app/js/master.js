@@ -208,11 +208,12 @@ class checkIn {
     ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
     ["Opel", "White", "Car", "Naturum Parkering", 1],
     ["Opel", "White", "Car", "Förvaltning Parkering", 2],
+    ["Opel", "White", "Car", "Förvaltning Parkering", 3],
     ["Yosemite", "MTB", "eBike", "Förvaltning", 1],
     ["Yosemite", "MTB", "eBike", "Förvaltning", 2],
     ["Yosemite", "MTB", "eBike", "Förvaltning", 3],
     ["Yosemite", "Road", "eBike", "Naturum Pannrum", 4],
-    ["FatBike", "MTB", "eBike", "Naturum Pannrum", 1],
+    ["FatTire", "MTB", "eBike", "Naturum Pannrum", 1],
     ["Segway", "X2 SE", "All-Terrain Scooter", "Naturum Pannrum", 1]
   ];
   for (let i in equipmentList) {
@@ -229,3 +230,9 @@ window.item = item;
   AllItems.forEach(item => (htmlContent += item.cardHtml()));
   equipmentDiv.innerHTML = htmlContent;
 })();
+
+window.item["Yosemite1"].checkOut("Carlos Velasco");
+window.item["Yosemite2"].checkOut("Svarrer Cornelius");
+window.item["GoPro3"].checkOut("Daniel Åberg");
+window.item["Nikon1"].checkOut("Daniel Åberg");
+window.item["Opel3"].checkOut("Daniel Åberg");
