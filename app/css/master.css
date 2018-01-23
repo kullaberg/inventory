@@ -37,3 +37,7 @@ div div div.chip {
 .card .card-image span.card-title.title {
   padding: 6px 24px;
 }
+
+i.material-icons.checks {
+  font-size: 9px;
+}

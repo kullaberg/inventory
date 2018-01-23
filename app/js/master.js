@@ -29,6 +29,7 @@ class item {
     this.type = itemParams[2];
     this.location = itemParams[3];
     this.idNumber = itemParams[4];
+    this.Log = [];
     this.description = `${this.brand} ${this.model} ${this.type} #${
       this.idNumber
     }`;
@@ -50,7 +51,7 @@ class item {
         this.name
       }'].checkOut()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab purple lighten-1 scale-transition">
+      }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">playlist_add</i>
     </a > `;
     } else if (window.userName === this.checkedOut.by) {
@@ -58,13 +59,13 @@ class item {
         this.name
       }'].checkIn()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab orange lighten-1 scale-transition" >
+      }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition" >
       <i class="material-icons large">undo</i>
     </a >`;
     } else {
       item.button = `<a id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab disabled purple lighten-1 scale-transition" >
+      }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition" >
       <i class="material-icons large">playlist_add</i>
     </a >`;
     }
@@ -100,10 +101,10 @@ class item {
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">${this.brand} ${
       this.type
-    }
+    } Log
         <i class="material-icons right">close</i>
       </span>
-      <p>Here is some more information about this product that is only revealed once clicked on.</p>
+      <p>${this.readLog()}</p>
     </div>
   </div>
 </div>
@@ -127,6 +128,24 @@ class item {
     }, 100);
   }
 
+  readLog() {
+    let content = "";
+    this.Log.forEach(function(item) {
+      if (item.constructor.name === "checkOut") {
+        content +=
+          '<div class="chip"><i class="material-icons checks">arrow_upward</i> ';
+      } else if (item.constructor.name === "checkIn") {
+        content +=
+          '<div class="chip"><i class="material-icons checks">arrow_downward</i> ';
+      }
+      content += `${item.by} ${new Date(
+        item.timeStamp
+      ).toLocaleDateString()} </div>
+      `;
+    });
+    return content;
+  }
+
   checkOut(user = window.userName) {
     new checkOut(person[user], window.item[this.name]);
   }
@@ -145,7 +164,6 @@ class person {
   }
 }
 
-let Log = new Set();
 let ItemsOut = new Set();
 class checkOut {
   /**
@@ -170,7 +188,7 @@ class checkOut {
     itemArg.cardRender();
     this.by = personArg.name;
     this.timeStamp = Date.now();
-    Log.add(this);
+    itemArg.Log.unshift(this);
   }
 }
 
@@ -196,7 +214,7 @@ class checkIn {
     }
     itemArg.cardRender();
     this.timeStamp = Date.now();
-    Log.add(this);
+    itemArg.Log.unshift(this);
   }
 }
 
