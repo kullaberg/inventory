@@ -97,10 +97,8 @@ class item {
           : `<div class="chip">@ ${this.location}</div>`
       }
     </div>
-    <div class="card-reveal">
-      <span class="card-title grey-text text-darken-4">${this.brand} ${
-      this.type
-    } Log
+    <div class="card-reveal blue lighten-2">
+      <span class="card-title white-text">${this.brand} ${this.type} Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -132,10 +130,10 @@ class item {
     this.Log.forEach(function(item) {
       if (item.constructor.name === "checkOut") {
         content +=
-          '<div class="chip"><i class="material-icons checks">arrow_upward</i> ';
+          '<div class="chip purple white-text"><i class="material-icons checks">arrow_upward</i> ';
       } else if (item.constructor.name === "checkIn") {
         content +=
-          '<div class="chip"><i class="material-icons checks">arrow_downward</i> ';
+          '<div class="chip orange white-text"><i class="material-icons checks">arrow_downward</i> ';
       }
       content += `${item.by} ${new Date(
         item.timeStamp
