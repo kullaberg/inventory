@@ -89,13 +89,12 @@ class item {
     <div class="card-action">
       ${
         this.checkedOut
-          ? '<div class="chip">' +
-            this.checkedOut.by +
-            "</div>" +
-            '<div class="chip">' +
-            new Date(this.checkedOut.time).toLocaleDateString() +
-            "</div>"
-          : '<div class="chip">' + this.location + "</div>"
+          ? `<div class="chip"><i class="material-icons checks">arrow_upward</i> ${
+              this.checkedOut.by
+            } ${new Date(
+              this.checkedOut.time
+            ).toLocaleDateString()} </div>`
+          : `<div class="chip">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal">
