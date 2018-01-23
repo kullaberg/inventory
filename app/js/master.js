@@ -60,42 +60,54 @@ class item {
         this.name
       }" class="btn-floating btn-large halfway-fab orange lighten-1 scale-transition" >
       <i class="material-icons large">undo</i>
-    </a > `;
+    </a >`;
     } else {
       item.button = `<a id="button${
         this.name
       }" class="btn-floating btn-large halfway-fab disabled purple lighten-1 scale-transition" >
       <i class="material-icons large">playlist_add</i>
-    </a > `;
+    </a >`;
     }
     let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
-      <div class="card">
-        <div class="card-image">
-          ${
-            !this.photo
-              ? '<div class="blue lighten-2 display"></div>'
-              : this.photo
-          }
-          <span class="card-title title">${this.brand} ${this.type}</span>
-          ${item.button}
-        </div>
-        <div class="card-content grey-text text-lighten description">
-          <p>${this.description}</p>
-        </div>
-        <div class="card-action">
-          ${
-            this.checkedOut
-              ? '<div class="chip">' +
-                this.checkedOut.by +
-                "</div>" +
-                '<div class="chip">' +
-                new Date(this.checkedOut.time).toLocaleDateString() +
-                "</div>"
-              : '<div class="chip">' + this.location + "</div>"
-          }
-        </div>
-      </div>
-</div > `;
+  <div class="card">
+    <div class="card-image">
+      ${
+        !this.photo
+          ? '<div class="blue lighten-2 display"></div>'
+          : this.photo
+      }
+      <span class="card-title title activator">${this.brand} ${
+      this.type
+    }</span>
+      ${item.button}
+    </div>
+    <div class="card-content grey-text text-lighten description">
+      <p>${this.description}</p>
+    </div>
+
+    <div class="card-action">
+      ${
+        this.checkedOut
+          ? '<div class="chip">' +
+            this.checkedOut.by +
+            "</div>" +
+            '<div class="chip">' +
+            new Date(this.checkedOut.time).toLocaleDateString() +
+            "</div>"
+          : '<div class="chip">' + this.location + "</div>"
+      }
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">${this.brand} ${
+      this.type
+    }
+        <i class="material-icons right">close</i>
+      </span>
+      <p>Here is some more information about this product that is only revealed once clicked on.</p>
+    </div>
+  </div>
+</div>
+`;
 
     return htmlContent;
   }

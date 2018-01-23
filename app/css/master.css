@@ -1,5 +1,5 @@
-main {
-  margin-bottom: 6rem !important;
+body main {
+  margin-bottom: 6rem;
 }
 
 .card-title.title {
@@ -18,22 +18,22 @@ main {
   height: 9rem;
 }
 
-div.card-content{
-  padding: 10px 24px !important;
+div div.card-content.description {
+  padding: 10px 24px;
 }
 
-div.card-action{
-  padding: 10px 24px !important;
+div.card div.card-action {
+  padding: 10px 24px;
 }
 
-div div div.chip{
-height: 20px;
-font-size: 11px;
-line-height: 20px;
-padding: 0 8px;
-font-weight: 500;
+div div div.chip {
+  height: 20px;
+  font-size: 11px;
+  line-height: 20px;
+  padding: 0 8px;
+  font-weight: 500;
 }
 
-.card .card-image span.card-title.title{
+.card .card-image span.card-title.title {
   padding: 6px 24px;
 }

@@ -59,7 +59,7 @@ module.exports = function e(env) {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: "Front-End-Test",
+        title: "Inventory",
         template: "./app/index.ejs"
       })
     ]
