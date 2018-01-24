@@ -39,9 +39,12 @@ div div div.chip {
 }
 
 i.material-icons.checks {
-  font-size: 13px;
+  font-size: 1.3rem;
+  padding: 3.5px 0 0 2px;
   float: left;
-  margin: 3px 6px 0 -1px;
-  height: 0.7rem;
-  width: 0.7rem;
+  margin: -3px 0px 0 -10px;
+  height: 26px;
+  width: 26px;
+  border-radius: 16px;
+  background: inherit;
 }
