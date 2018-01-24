@@ -1,5 +1,5 @@
-body main {
-  margin-bottom: 6rem;
+body main.row {
+  margin-bottom: 12rem;
 }
 
 .card-title.title {

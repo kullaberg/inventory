@@ -80,7 +80,7 @@ class item {
       <i class="material-icons large">playlist_add</i>
     </a>`;
     }
-    let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
+    let htmlContent = `<div id="${this.name}" class="">
   <div class="card">
     <div class="card-image">
       ${
@@ -268,10 +268,24 @@ let ItemsOut = new Set();
 window.item = item;
 // Populate DOM
 (function() {
-  let equipmentDiv = document.getElementById("equipment");
-  let htmlContent = ``;
-  AllItems.forEach(item => (htmlContent += item.cardHtml()));
-  equipmentDiv.innerHTML = htmlContent;
+  let spacesDiv = document.getElementById("spaces");
+  let transportDiv = document.getElementById("transport");
+  let productionDiv = document.getElementById("production");
+  let productionContent = ``;
+  let spacesContent = ``;
+  let transportContent = ``;
+  AllItems.forEach(item => {
+    if (item.type === "Camera") {
+      productionContent += item.cardHtml();
+    } else if (item.type === "Bed" || item.type === "Room") {
+      spacesContent += item.cardHtml();
+    } else if (item.type === "Vehicle" || "Bike") {
+      transportContent += item.cardHtml();
+    }
+  });
+  productionDiv.innerHTML += productionContent;
+  spacesDiv.innerHTML += spacesContent;
+  transportDiv.innerHTML += transportContent;
 })();
 
 window.item["Yosemite1"].checkOut("Carlos Velasco");
