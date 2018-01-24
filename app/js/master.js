@@ -63,7 +63,7 @@ class item {
       }'].checkOut()" id="button${
         this.name
       }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
-      <i class="material-icons large">playlist_add</i>
+      <i class="material-icons large">assignment_turned_in</i>
     </a> `;
     } else if (window.userName === this.Log[0].by) {
       item.button = `<a onclick="window.item['${
@@ -77,7 +77,7 @@ class item {
       item.button = `<a id="button${
         this.name
       }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
-      <i class="material-icons large">playlist_add</i>
+      <i class="material-icons large">hourglass_empty</i>
     </a>`;
     }
     let htmlContent = `<div id="${this.name}" class="">
@@ -100,7 +100,7 @@ class item {
     <div class="card-action">
       ${
         this.Log[0].checkOut
-          ? `<div class="chip"><i class="material-icons checks">arrow_upward</i> ${
+          ? `<div class="chip"><i class="material-icons checks">assignment_turned_in</i> ${
               this.Log[0].by
             } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
           : `<div class="chip">@ ${this.location}</div>`
@@ -141,13 +141,13 @@ class item {
     this.Log.forEach(function(item) {
       if (item.checkOut) {
         content +=
-          '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">arrow_upward</i> ';
+          '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment_turned_in</i> ';
       } else if (item.checkIn) {
         content +=
-          '<div class="chip orange lighten-2 white-text"><i class="material-icons checks">arrow_downward</i> ';
+          '<div class="chip orange lighten-2 white-text"><i class="material-icons checks">undo</i> ';
       } else if (item.by === "Initial Log Record") {
         content +=
-          '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add</i> ';
+          '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add_circle</i> ';
       }
       content += `${item.by} ${new Date(
         item.time
