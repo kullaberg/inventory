@@ -16,29 +16,37 @@
 let ItemsIn = new Set();
 let AllItems = new Set();
 
-/**
- * Creates an instance of item.
- * @param {string} [itemParams=['Name', 'Model', 1]]
- * @param {any} location
- * @memberof item
- */
 class item {
-  constructor(itemParams = ["Name", "Model", "Type", "Location", 1]) {
+  /**
+   * Creates an instance of item.
+   * @param {string} [itemParams=["Name", "Model", "Type", "Location", 1]]
+   * @param {string} [log=[
+   *       {
+   *         by: "Initial Log Record",
+   *         time: Date.now()
+   *       }
+   *     ]]
+   * @memberof item
+   */
+  constructor(
+    itemParams = ["Name", "Model", "Type", "Location", 1],
+    log = [
+      {
+        by: "Initial Log Record",
+        time: Date.now()
+      }
+    ]
+  ) {
     this.brand = itemParams[0];
     this.model = itemParams[1];
     this.type = itemParams[2];
     this.location = itemParams[3];
     this.idNumber = itemParams[4];
-    this.Log = [];
+    this.Log = log;
     this.description = `${this.brand} ${this.model} ${this.type} #${
       this.idNumber
     }`;
     this.name = `${this.brand}${this.idNumber}`;
-    this.returned = {
-      by: "new item",
-      timeStamp: Date.now()
-    };
-
     ItemsIn.add(this);
     AllItems.add(this);
   }
@@ -46,28 +54,31 @@ class item {
   cardHtml() {
     let item = {};
 
-    if (!this.returned === false) {
+    if (
+      this.Log[0].by === "Initial Log Record" ||
+      !this.Log[0].checkIn === false
+    ) {
       item.button = `<a onclick="window.item['${
         this.name
       }'].checkOut()" id="button${
         this.name
       }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">playlist_add</i>
-    </a > `;
-    } else if (window.userName === this.checkedOut.by) {
+    </a> `;
+    } else if (window.userName === this.Log[0].by) {
       item.button = `<a onclick="window.item['${
         this.name
       }'].checkIn()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition" >
+      }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
       <i class="material-icons large">undo</i>
-    </a >`;
-    } else {
+    </a>`;
+    } else if (window.userName !== this.Log[0].by) {
       item.button = `<a id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition" >
+      }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
       <i class="material-icons large">playlist_add</i>
-    </a >`;
+    </a>`;
     }
     let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
   <div class="card">
@@ -88,12 +99,10 @@ class item {
 
     <div class="card-action">
       ${
-        this.checkedOut
+        this.Log[0].checkOut
           ? `<div class="chip"><i class="material-icons checks">arrow_upward</i> ${
-              this.checkedOut.by
-            } ${new Date(
-              this.checkedOut.time
-            ).toLocaleDateString()} </div>`
+              this.Log[0].by
+            } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
           : `<div class="chip">@ ${this.location}</div>`
       }
     </div>
@@ -130,27 +139,46 @@ class item {
   readLog() {
     let content = "";
     this.Log.forEach(function(item) {
-      if (item.constructor.name === "checkOut") {
+      if (item.checkOut) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">arrow_upward</i> ';
-      } else if (item.constructor.name === "checkIn") {
+      } else if (item.checkIn) {
         content +=
           '<div class="chip orange lighten-2 white-text"><i class="material-icons checks">arrow_downward</i> ';
+      } else if (item.by === "Initial Log Record") {
+        content +=
+          '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add</i> ';
       }
       content += `${item.by} ${new Date(
-        item.timeStamp
+        item.time
       ).toLocaleDateString()} </div>
       `;
     });
     return content;
   }
 
-  checkOut(user = window.userName) {
-    new checkOut(person[user], window.item[this.name]);
+  checkOut(user) {
+    let checkOut = {
+      checkOut: {},
+      by: user || window.userName,
+      time: Date.now()
+    };
+    ItemsIn.delete(this);
+    ItemsOut.add(this);
+    this.Log.unshift(checkOut);
+    this.cardRender();
   }
 
-  checkIn() {
-    new checkIn(window.item[this.name]);
+  checkIn(user) {
+    let checkIn = {
+      checkIn: {},
+      by: user || window.userName,
+      time: Date.now()
+    };
+    ItemsOut.delete(this);
+    ItemsIn.add(this);
+    this.Log.unshift(checkIn);
+    this.cardRender();
   }
 }
 
@@ -158,66 +186,13 @@ let People = new Set();
 class person {
   constructor(name) {
     this.name = name;
-    this.itemsCheckedOut = new Set();
     People.add(this);
   }
 }
 
 let ItemsOut = new Set();
-class checkOut {
-  /**
-   * Creates an instance of checkOut.
-   * @param {any} personArg
-   * @param {any} itemArg
-   * @memberof checkOut
-   */
-  constructor(personArg, itemArg) {
-    if (ItemsIn.has(itemArg)) {
-      itemArg.checkedOut = {
-        by: personArg.name,
-        time: Date.now()
-      };
-      personArg.itemsCheckedOut.add(itemArg);
-      ItemsIn.delete(itemArg);
-      ItemsOut.add(itemArg);
-    }
-    if (itemArg.returned) {
-      delete itemArg.returned;
-    }
-    itemArg.cardRender();
-    this.by = personArg.name;
-    this.timeStamp = Date.now();
-    itemArg.Log.unshift(this);
-  }
-}
 
-class checkIn {
-  /**
-   * Creates an instance of checkIn.
-   * @param {any} itemArg
-   * @memberof checkIn
-   */
-  constructor(itemArg) {
-    if (ItemsOut.has(itemArg)) {
-      let personWithItem = itemArg.checkedOut.by;
-      let set = person[personWithItem].itemsCheckedOut;
-      set.delete(itemArg);
-      itemArg.returned = {
-        by: itemArg.checkedOut.by,
-        timeStamp: Date.now()
-      };
-      delete itemArg.checkedOut;
-      ItemsOut.delete(itemArg);
-      ItemsIn.add(itemArg);
-      this.by = itemArg.returned.by;
-    }
-    itemArg.cardRender();
-    this.timeStamp = Date.now();
-    itemArg.Log.unshift(this);
-  }
-}
-
-// Pupulate People
+// Populate People
 (function() {
   let peopleList = [
     "Carlos Velasco",
@@ -236,7 +211,9 @@ class checkIn {
     "Freddy Kristensson"
   ];
 
-  let nameFound = false;
+  window.userName = window.localStorage.getItem("userName");
+
+  let nameFound = peopleList.includes(window.userName);
 
   while (!nameFound) {
     window.userName = window.prompt(
@@ -244,6 +221,9 @@ class checkIn {
       "Carlos Velasco"
     );
     nameFound = peopleList.includes(window.userName);
+    if (nameFound) {
+      window.localStorage.setItem("userName", window.userName);
+    }
   }
 
   for (let i in peopleList) {
