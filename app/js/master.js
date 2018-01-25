@@ -230,8 +230,8 @@ class person {
 
   while (!nameFound) {
     window.userName = window.prompt(
-      "Hej! What is your name? (You can also use my name as a test.)",
-      "Carlos Velasco"
+      "Hej! What is your name?",
+      "Your first and last name"
     );
     nameFound = peopleList.includes(window.userName);
     if (nameFound) {
@@ -253,11 +253,11 @@ class person {
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
+    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
     ["Opel", "White Car", "Vehicle", "Naturum Parkering", 1],
     ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 2],
     ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 3],
     ["Golf", "Cart", "Vehicle", "Förvaltning Parkering", 1],
-    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 1],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 2],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 3],
