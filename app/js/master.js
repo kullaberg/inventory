@@ -107,9 +107,7 @@ class item {
           ? `<div class="blue lighten-2 display"></div>`
           : this.photo
       }
-      <span class="card-title title activator">${this.brand} ${
-      this.type
-    }</span>
+      <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
     </div>
     <div class="card-content grey-text text-lighten description">
@@ -119,10 +117,10 @@ class item {
     <div class="card-action">
       ${
         this.Log[0].checkOut
-          ? `<div class="chip"><i class="material-icons checks ">assignment_ind</i> ${
+          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
               this.Log[0].by
             } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
-          : `<div class="chip">@ ${this.location}</div>`
+          : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">

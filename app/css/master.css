@@ -53,6 +53,11 @@ i.material-icons.checks {
   position: absolute;
   opacity: 0.18;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
 /* 
 section.col.s12.m4.l3 {
   max-height: 50vh;
