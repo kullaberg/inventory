@@ -257,7 +257,7 @@ let ItemsOut = new Set();
     ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
     ["Naturum", "Conference", "Room", "Naturum", 1],
     ["Naturum", "Conference", "Room", "Naturum", 2],
-    ["Falknestet", "Conference", "Room", "Kullens Fyr", 2]
+    ["Falknästet", "Conference", "Room", "Kullens Fyr", 2]
   ];
   for (let i in equipmentList) {
     let name = equipmentList[i][0] + equipmentList[i][4];
