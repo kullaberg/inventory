@@ -48,19 +48,19 @@ class item {
     this.name = `${this.brand}${this.idNumber}`;
     switch (this.type) {
       case "Vehicle":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">directions_car</i></div>`;
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_car</i></div>`;
         break;
       case "Bike":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">directions_bike</i></div>`;
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_bike</i></div>`;
         break;
       case "Bed":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">hotel</i></div>`;
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">hotel</i></div>`;
         break;
       case "Room":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">forum</i></div>`;
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
         break;
       case "Camera":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">photo_camera</i></div>`;
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
         break;
 
       default:
