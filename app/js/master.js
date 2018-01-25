@@ -46,6 +46,27 @@ class item {
       this.idNumber
     }`;
     this.name = `${this.brand}${this.idNumber}`;
+    switch (this.type) {
+      case "Vehicle":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">directions_car</i></div>`;
+        break;
+      case "Bike":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">directions_bike</i></div>`;
+        break;
+      case "Bed":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">hotel</i></div>`;
+        break;
+      case "Room":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">forum</i></div>`;
+        break;
+      case "Camera":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium blue-text text-lighten-3">photo_camera</i></div>`;
+        break;
+
+      default:
+        break;
+    }
+    this.type;
     AllItems.add(this);
   }
 
@@ -83,7 +104,7 @@ class item {
     <div class="card-image">
       ${
         !this.photo
-          ? '<div class="blue lighten-2 display"></div>'
+          ? `<div class="blue lighten-2 display"></div>`
           : this.photo
       }
       <span class="card-title title activator">${this.brand} ${

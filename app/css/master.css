@@ -48,3 +48,12 @@ i.material-icons.checks {
   border-radius: 16px;
   background: inherit;
 }
+
+.typeIcons.medium {
+  /* margin: 4rem 12rem; */
+  font-size: 5rem;
+  right: 1rem;
+  bottom: 3rem;
+  position: absolute;
+  opacity: 0.5;
+}
