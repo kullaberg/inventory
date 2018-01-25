@@ -312,10 +312,10 @@ window.item = item;
     }
   });
   listDiv.innerHTML =
-    transportVehicleContent +
-    transportBikeContent +
-    spacesBedContent +
     spacesRoomContent +
+    spacesBedContent +
+    transportBikeContent +
+    transportVehicleContent +
     productionCameraContent;
 })();
 
