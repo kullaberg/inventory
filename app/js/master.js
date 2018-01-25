@@ -282,24 +282,43 @@ class person {
 window.item = item;
 // Populate DOM
 (function() {
-  let spacesDiv = document.getElementById("spaces");
-  let transportDiv = document.getElementById("transport");
-  let productionDiv = document.getElementById("production");
-  let productionContent = ``;
-  let spacesContent = ``;
-  let transportContent = ``;
+  let spacesBedDiv = document.getElementById("spacesBed");
+  let spacesRoomDiv = document.getElementById("spacesRoom");
+  let transportVehicleDiv = document.getElementById("transportVehicle");
+  let transportBikeDiv = document.getElementById("transportBike");
+  let productionCameraDiv = document.getElementById("productionCamera");
+  let productionCameraContent = ``;
+  let spacesBedContent = ``;
+  let spacesRoomContent = ``;
+  let transportBikeContent = ``;
+  let transportVehicleContent = ``;
   AllItems.forEach(item => {
-    if (item.type === "Camera") {
-      productionContent += item.cardHtml();
-    } else if (item.type === "Bed" || item.type === "Room") {
-      spacesContent += item.cardHtml();
-    } else if (item.type === "Vehicle" || "Bike") {
-      transportContent += item.cardHtml();
+    switch (item.type) {
+      case "Vehicle":
+        transportVehicleContent += item.cardHtml();
+        break;
+      case "Bike":
+        transportBikeContent += item.cardHtml();
+        break;
+      case "Bed":
+        spacesBedContent += item.cardHtml();
+        break;
+      case "Room":
+        spacesRoomContent += item.cardHtml();
+        break;
+      case "Camera":
+        productionCameraContent += item.cardHtml();
+        break;
+
+      default:
+        break;
     }
   });
-  productionDiv.innerHTML += productionContent;
-  spacesDiv.innerHTML += spacesContent;
-  transportDiv.innerHTML += transportContent;
+  productionCameraDiv.innerHTML += productionCameraContent;
+  spacesBedDiv.innerHTML += spacesBedContent;
+  spacesRoomDiv.innerHTML += spacesRoomContent;
+  transportVehicleDiv.innerHTML += transportVehicleContent;
+  transportBikeDiv.innerHTML += transportBikeContent;
 })();
 
 window.item["Yosemite1"].checkOut("Carlos Velasco");
