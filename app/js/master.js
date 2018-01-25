@@ -205,7 +205,7 @@ class person {
   }
 }
 
-// Populate People
+//  Populate People
 (function() {
   let peopleList = [
     "Carlos Velasco",
