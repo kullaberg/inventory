@@ -99,7 +99,7 @@ class item {
       <i class="material-icons large">lock</i>
     </a>`;
     }
-    let htmlContent = `<div id="${this.name}" class="">
+    let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
   <div class="card">
     <div class="card-image">
       ${
@@ -205,7 +205,7 @@ class person {
   }
 }
 
-//  Populate People
+// Populate People
 (function() {
   let peopleList = [
     "Carlos Velasco",
@@ -282,11 +282,8 @@ class person {
 window.item = item;
 // Populate DOM
 (function() {
-  let spacesBedDiv = document.getElementById("spacesBed");
-  let spacesRoomDiv = document.getElementById("spacesRoom");
-  let transportVehicleDiv = document.getElementById("transportVehicle");
-  let transportBikeDiv = document.getElementById("transportBike");
-  let productionCameraDiv = document.getElementById("productionCamera");
+  let listDiv = document.getElementById("list");
+
   let productionCameraContent = ``;
   let spacesBedContent = ``;
   let spacesRoomContent = ``;
@@ -314,11 +311,12 @@ window.item = item;
         break;
     }
   });
-  productionCameraDiv.innerHTML += productionCameraContent;
-  spacesBedDiv.innerHTML += spacesBedContent;
-  spacesRoomDiv.innerHTML += spacesRoomContent;
-  transportVehicleDiv.innerHTML += transportVehicleContent;
-  transportBikeDiv.innerHTML += transportBikeContent;
+  listDiv.innerHTML =
+    transportVehicleContent +
+    transportBikeContent +
+    spacesBedContent +
+    spacesRoomContent +
+    productionCameraContent;
 })();
 
 window.item["Yosemite1"].checkOut("Carlos Velasco");
