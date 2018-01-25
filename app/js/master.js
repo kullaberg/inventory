@@ -13,7 +13,6 @@
 //   console.error(err)
 // });
 
-let ItemsIn = new Set();
 let AllItems = new Set();
 
 class item {
@@ -47,7 +46,6 @@ class item {
       this.idNumber
     }`;
     this.name = `${this.brand}${this.idNumber}`;
-    ItemsIn.add(this);
     AllItems.add(this);
   }
 
@@ -163,8 +161,6 @@ class item {
       by: user || window.userName,
       time: Date.now()
     };
-    ItemsIn.delete(this);
-    ItemsOut.add(this);
     this.Log.unshift(checkOut);
     this.cardRender();
   }
@@ -175,8 +171,6 @@ class item {
       by: user || window.userName,
       time: Date.now()
     };
-    ItemsOut.delete(this);
-    ItemsIn.add(this);
     this.Log.unshift(checkIn);
     this.cardRender();
   }
@@ -189,8 +183,6 @@ class person {
     People.add(this);
   }
 }
-
-let ItemsOut = new Set();
 
 // Populate People
 (function() {
@@ -235,29 +227,30 @@ let ItemsOut = new Set();
 // Populate Equipment
 (function() {
   let equipmentList = [
+    ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
+    ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
     ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
-    ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
-    ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
     ["Opel", "White Car", "Vehicle", "Naturum Parkering", 1],
     ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 2],
     ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 3],
+    ["Golf", "Cart", "Vehicle", "Förvaltning Parkering", 1],
+    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 1],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 2],
     ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 3],
     ["Yosemite", "Road eBike", "Bike", "Naturum Pannrum", 4],
     ["FatTire", "MTB eBike", "Bike", "Naturum Pannrum", 1],
-    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
+    ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
+    ["Naturum", "Conference", "Room", "Naturum", 1],
+    ["Naturum", "Conference", "Room", "Naturum", 2],
+    ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 1],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 3],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 4],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
-    ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
-    ["Naturum", "Conference", "Room", "Naturum", 1],
-    ["Naturum", "Conference", "Room", "Naturum", 2],
-    ["Falknästet", "Conference", "Room", "Kullens Fyr", 2]
+    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5]
   ];
   for (let i in equipmentList) {
     let name = equipmentList[i][0] + equipmentList[i][4];
