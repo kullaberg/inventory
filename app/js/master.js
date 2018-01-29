@@ -1,9 +1,25 @@
 // MongoDB
-// const stitch = require("mongodb-stitch");
-// const mongoDbClient = new stitch.StitchClient("inventorykstitch-cwlil");
-// const dbPopulate = mongoDbClient
-//   .service("mongodb", "mongodb-atlas")
-//   .db("Populate");
+// clientPromise.then(client => {
+//   const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
+//   client.login()
+//   .then(() =>
+//     db.collection('<COLLECTION>').updateOne({owner_id: client.authedId()}, {$set:{number:42}}, {upsert:true})
+//   )
+//   .then(()=>
+//     db.collection('<COLLECTION>').find({owner_id: client.authedId()}).limit(100).execute()
+//   )
+//   .then(docs => {
+//     console.log("Found docs", docs)
+//     console.log("[MongoDB Stitch] Connected to Stitch")
+//   }).catch(err => {
+//     console.error(err)
+//   });
+// });
+
+
+
+const stitch = require("mongodb-stitch");
+const clientPromise = stitch.StitchClientFactory.create('inventorykstitch-cwlil');
 
 let AllItems = new Set();
 
@@ -36,7 +52,7 @@ class item {
     this.Log = log;
     this.description = `${this.brand} ${this.model} ${this.type} #${
       this.idNumber
-    }`;
+      }`;
     this.name = `${this.brand}${this.idNumber}`;
     switch (this.type) {
       case "Vehicle":
@@ -74,23 +90,23 @@ class item {
     ) {
       item.button = `<a onclick="window.item['${
         this.name
-      }'].checkOut()" id="button${
+        }'].checkOut()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
+        }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
     } else if (window.userName === this.Log[0].by) {
       item.button = `<a onclick="window.item['${
         this.name
-      }'].checkIn()" id="button${
+        }'].checkIn()" id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
+        }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
       <i class="material-icons large">assignment_turned_in</i>
     </a>`;
     } else if (window.userName !== this.Log[0].by) {
       item.button = `<a id="button${
         this.name
-      }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
+        }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     }
@@ -98,9 +114,9 @@ class item {
   <div class="card">
     <div class="card-image">
       ${
-        !this.photo
-          ? `<div class="blue lighten-2 display"></div>`
-          : this.photo
+      !this.photo
+        ? `<div class="blue lighten-2 display"></div>`
+        : this.photo
       }
       <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
@@ -111,17 +127,17 @@ class item {
 
     <div class="card-action">
       ${
-        this.Log[0].checkOut
-          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-              this.Log[0].by
-            } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
-          : `<div class="chip activator pointer">@ ${this.location}</div>`
+      this.Log[0].checkOut
+        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+        this.Log[0].by
+        } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
+        : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-    } Log
+      } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -150,7 +166,7 @@ class item {
 
   readLog() {
     let content = "";
-    this.Log.forEach(function(item) {
+    this.Log.forEach(function (item) {
       if (item.checkOut) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
@@ -199,183 +215,166 @@ class person {
 }
 
 // Populate People
-(function() {
-  // let peopleList = {};
-  // mongoDbClient
-  //   .login()
-  //   .then(() =>
-  //     dbPopulate
-  //       .collection("People")
-  //       .find("peopleList")
-  //       .limit(100)
-  //       .execute()
-  //   )
-  //   .then(docs => {
-  //     peopleList = docs;
-  //     console.log("Found docs", docs);
-  //     console.log("[MongoDB Stitch] Connected to Stitch");
-  //   })
-  //   .catch(err => {
-  //     console.error(err);
-  //   });
+(function () {
 
-  let peopleList = [
-    "Carlos Velasco",
-    "Daniel Åberg",
-    "Malin Melén",
-    "Johanna Stedt",
-    "Mia Kristersson",
-    "Peter Ovgren",
-    "Laura Parsons",
-    "Jimena Castillo",
-    "Elena Bazhenova",
-    "Per-Inge Persson",
-    "Mats Sjöberg",
-    "Cornelius Svarrer",
-    "Helen Thorn Jönsson",
-    "Freddy Kristensson"
-  ];
-  // mongoDbClient
-  //   .login()
-  //   .then(() =>
-  //     dbPopulate.collection("People").updateOne(
-  //       { owner_id: mongoDbClient.authedId() },
-  //       { peopleList },
-  //       {
-  //         upsert: true
-  //       }
-  //     )
-  //   )
-  //   .catch(err => {
-  //     console.error(err);
-  //   });
-  window.userName = window.localStorage.getItem("userName");
 
-  let nameFound = peopleList.includes(window.userName);
+  clientPromise.then(client => {
+    const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
+    client.login()
+      .then(() =>
+        db.collection('People').find().limit(1).execute()
+      )
+      .then(docs => {
+        console.log("Found docs", docs[0].peopleList)
+        console.log("[MongoDB Stitch] Connected to Stitch")
+        window.userName = window.localStorage.getItem("userName");
 
-  while (!nameFound) {
-    window.userName = window.prompt(
-      "Hej! What is your name?",
-      "Your first and last name"
-    );
-    nameFound = peopleList.includes(window.userName);
-    if (nameFound) {
-      window.localStorage.setItem("userName", window.userName);
-    }
-  }
+        let nameFound = docs[0].peopleList.includes(window.userName);
+        // let nameFound = true;
 
-  for (let i in peopleList) {
-    let name = peopleList[i];
-    person[name] = new person(peopleList[i]);
-  }
+        while (!nameFound) {
+          window.userName = window.prompt(
+            "Hej! What is your name?",
+            "Your first and last name"
+          );
+          nameFound = docs[0].peopleList.includes(window.userName);
+          if (nameFound) {
+            window.localStorage.setItem("userName", window.userName);
+          }
+        }
+
+        for (let i in docs[0].peopleList) {
+          let name = docs[0].peopleList[i];
+          person[name] = new person(docs[0].peopleList[i]);
+        }
+      }).catch(err => {
+        console.error(err)
+      });
+  });
+
+
+  // let peopleList = [
+  //   "Carlos Velasco",
+  //   "Daniel Åberg",
+  //   "Malin Melén",
+  //   "Johanna Stedt",
+  //   "Mia Kristersson",
+  //   "Peter Ovgren",
+  //   "Laura Parsons",
+  //   "Jimena Castillo",
+  //   "Elena Bazhenova",
+  //   "Per-Inge Persson",
+  //   "Mats Sjöberg",
+  //   "Cornelius Svarrer",
+  //   "Helen Thorn Jönsson",
+  //   "Freddy Kristensson"
+  // ];
+
 })();
 
 // Populate Equipment
-(function() {
-  let equipmentList = [
-    ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
-    ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
-    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
-    ["Opel", "White Car", "Vehicle", "Naturum Parkering", 1],
-    ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 2],
-    ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 3],
-    ["Golf", "Cart", "Vehicle", "Förvaltning Parkering", 1],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 1],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 2],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 3],
-    ["Yosemite", "Road eBike", "Bike", "Naturum Pannrum", 4],
-    ["FatTire", "MTB eBike", "Bike", "Naturum Pannrum", 1],
-    ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
-    ["Hans Perskrog", "Conference", "Room", "Naturum", 1],
-    ["Porten", "Conference", "Room", "Naturum", 2],
-    ["Kullanäsan", "Work", "Office", "Naturum", 1],
-    ["Kulla Lå", "Work", "Office", "Naturum", 2],
-    ["Lycktan", "Work", "Office", "Naturum", 3],
-    ["Paradishamn", "Work", "Office", "Naturum", 4],
-    ["Kringelberget", "Work", "Office", "Naturum", 5],
-    ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 1],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 3],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 4],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
-  ];
+(function () {
+  // let equipmentList = [
+  //   ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
+  //   ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
+  //   ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
+  //   ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
+  //   ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
+  //   ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
+  //   ["Opel", "White Car", "Vehicle", "Naturum Parkering", 1],
+  //   ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 2],
+  //   ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 3],
+  //   ["Golf", "Cart", "Vehicle", "Förvaltning Parkering", 1],
+  //   ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 1],
+  //   ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 2],
+  //   ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 3],
+  //   ["Yosemite", "Road eBike", "Bike", "Naturum Pannrum", 4],
+  //   ["FatTire", "MTB eBike", "Bike", "Naturum Pannrum", 1],
+  //   ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
+  //   ["Hans Perskrog", "Conference", "Room", "Naturum", 1],
+  //   ["Porten", "Conference", "Room", "Naturum", 2],
+  //   ["Kullanäsan", "Work", "Office", "Naturum", 1],
+  //   ["Kulla Lå", "Work", "Office", "Naturum", 2],
+  //   ["Lycktan", "Work", "Office", "Naturum", 3],
+  //   ["Paradishamn", "Work", "Office", "Naturum", 4],
+  //   ["Kringelberget", "Work", "Office", "Naturum", 5],
+  //   ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 1],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 3],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 4],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
+  //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
+  // ];
 
-  // let equipmentList;
 
-  // mongoDbClient
-  //   .login()
-  //   .then(() =>
-  //     dbPopulate
-  //       .collection("Items")
-  //       .find({ equipmentList })
-  //       .limit(100)
-  //       .execute()
-  //   )
-  //   .then(docs => {
-  //     equipmentList = docs;
-  //     console.log("Found docs", docs);
-  //     console.log("[MongoDB Stitch] Connected to Stitch");
-  //   })
-  //   .catch(err => {
-  //     console.error(err);
-  //   });
+  clientPromise.then(client => {
+    const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
+    client.login()
+      .then(() =>
+        db.collection('Items').find().limit(1).execute()
+      )
+      .then(docs => {
+        console.log("Found docs", docs[0].equipmentList);
+        console.log("[MongoDB Stitch] Connected to Stitch");
+        for (let i in docs[0].equipmentList) {
+          let name = docs[0].equipmentList[i][0] + docs[0].equipmentList[i][4];
+          item[name] = new item(docs[0].equipmentList[i]);
+        }
 
-  for (let i in equipmentList) {
-    let name = equipmentList[i][0] + equipmentList[i][4];
-    item[name] = new item(equipmentList[i]);
-  }
-})();
 
-window.item = item;
-// Populate DOM
-(function() {
-  let listDiv = document.getElementById("list");
+        window.item = item;
+        // Populate DOM
+        (function () {
+          let listDiv = document.getElementById("list");
 
-  let productionCameraContent = ``;
-  let spacesBedContent = ``;
-  let spacesRoomContent = ``;
-  let transportBikeContent = ``;
-  let transportVehicleContent = ``;
-  AllItems.forEach(item => {
-    switch (item.type) {
-      case "Vehicle":
-        transportVehicleContent += item.cardHtml();
-        break;
-      case "Bike":
-        transportBikeContent += item.cardHtml();
-        break;
-      case "Bed":
-        spacesBedContent += item.cardHtml();
-        break;
-      case "Room":
-        spacesRoomContent += item.cardHtml();
-        break;
-      case "Office":
-        spacesRoomContent += item.cardHtml();
-        break;
-      case "Camera":
-        productionCameraContent += item.cardHtml();
-        break;
+          let productionCameraContent = ``;
+          let spacesBedContent = ``;
+          let spacesRoomContent = ``;
+          let transportBikeContent = ``;
+          let transportVehicleContent = ``;
+          AllItems.forEach(item => {
+            switch (item.type) {
+              case "Vehicle":
+                transportVehicleContent += item.cardHtml();
+                break;
+              case "Bike":
+                transportBikeContent += item.cardHtml();
+                break;
+              case "Bed":
+                spacesBedContent += item.cardHtml();
+                break;
+              case "Room":
+                spacesRoomContent += item.cardHtml();
+                break;
+              case "Office":
+                spacesRoomContent += item.cardHtml();
+                break;
+              case "Camera":
+                productionCameraContent += item.cardHtml();
+                break;
 
-      default:
-        break;
-    }
+              default:
+                break;
+            }
+          });
+          listDiv.innerHTML =
+            spacesRoomContent +
+            spacesBedContent +
+            transportBikeContent +
+            transportVehicleContent +
+            productionCameraContent;
+        })();
+
+        window.item["Yosemite1"].checkOut("Carlos Velasco");
+        window.item["Yosemite2"].checkOut("Cornelius Svarrer");
+        window.item["GoPro3"].checkOut("Daniel Åberg");
+        window.item["Nikon1"].checkOut("Daniel Åberg");
+        window.item["Opel3"].checkOut("Daniel Åberg");
+      }).catch(err => {
+        console.error(err)
+      });
   });
-  listDiv.innerHTML =
-    spacesRoomContent +
-    spacesBedContent +
-    transportBikeContent +
-    transportVehicleContent +
-    productionCameraContent;
-})();
 
-window.item["Yosemite1"].checkOut("Carlos Velasco");
-window.item["Yosemite2"].checkOut("Cornelius Svarrer");
-window.item["GoPro3"].checkOut("Daniel Åberg");
-window.item["Nikon1"].checkOut("Daniel Åberg");
-window.item["Opel3"].checkOut("Daniel Åberg");
+
+})();
