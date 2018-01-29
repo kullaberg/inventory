@@ -76,6 +76,9 @@ class item {
       case "Room":
         this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
         break;
+      case "Office":
+        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">work</i></div>`;
+        break;
       case "Camera":
         this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
         break;
@@ -279,8 +282,13 @@ class person {
     ["Yosemite", "Road eBike", "Bike", "Naturum Pannrum", 4],
     ["FatTire", "MTB eBike", "Bike", "Naturum Pannrum", 1],
     ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
-    ["Naturum", "Conference", "Room", "Naturum", 1],
-    ["Naturum", "Conference", "Room", "Naturum", 2],
+    ["Hans Perskrog", "Conference", "Room", "Naturum", 1],
+    ["Porten", "Conference", "Room", "Naturum", 2],
+    ["Kullanasan", "Work", "Office", "Naturum", 1],
+    ["Kulla Loa", "Work", "Office", "Naturum", 2],
+    ["Lycktan", "Work", "Office", "Naturum", 3],
+    ["Paradishamn", "Work", "Office", "Naturum", 4],
+    ["Kringelberget", "Work", "Office", "Naturum", 5],
     ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 1],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
@@ -317,6 +325,9 @@ window.item = item;
         spacesBedContent += item.cardHtml();
         break;
       case "Room":
+        spacesRoomContent += item.cardHtml();
+        break;
+      case "Office":
         spacesRoomContent += item.cardHtml();
         break;
       case "Camera":
