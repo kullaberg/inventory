@@ -1,34 +1,9 @@
 // MongoDB
-const stitch = require("mongodb-stitch");
-const mongoDbClient = new stitch.StitchClient("inventorykstitch-cwlil");
-const dbPopulate = mongoDbClient
-  .service("mongodb", "mongodb-atlas")
-  .db("Populate");
-mongoDbClient
-  .login()
-  .then(() =>
-    dbPopulate
-      .collection("Items")
-      .updateOne(
-        { owner_id: mongoDbClient.authedId() },
-        { $set: { number: 42 } },
-        { upsert: true }
-      )
-  )
-  .then(() =>
-    dbPopulate
-      .collection("Items")
-      .find({ owner_id: mongoDbClient.authedId() })
-      .limit(100)
-      .execute()
-  )
-  .then(docs => {
-    console.log("Found docs", docs);
-    console.log("[MongoDB Stitch] Connected to Stitch");
-  })
-  .catch(err => {
-    console.error(err);
-  });
+// const stitch = require("mongodb-stitch");
+// const mongoDbClient = new stitch.StitchClient("inventorykstitch-cwlil");
+// const dbPopulate = mongoDbClient
+//   .service("mongodb", "mongodb-atlas")
+//   .db("Populate");
 
 let AllItems = new Set();
 
@@ -225,6 +200,25 @@ class person {
 
 // Populate People
 (function() {
+  // let peopleList = {};
+  // mongoDbClient
+  //   .login()
+  //   .then(() =>
+  //     dbPopulate
+  //       .collection("People")
+  //       .find("peopleList")
+  //       .limit(100)
+  //       .execute()
+  //   )
+  //   .then(docs => {
+  //     peopleList = docs;
+  //     console.log("Found docs", docs);
+  //     console.log("[MongoDB Stitch] Connected to Stitch");
+  //   })
+  //   .catch(err => {
+  //     console.error(err);
+  //   });
+
   let peopleList = [
     "Carlos Velasco",
     "Daniel Åberg",
@@ -241,7 +235,20 @@ class person {
     "Helen Thorn Jönsson",
     "Freddy Kristensson"
   ];
-
+  // mongoDbClient
+  //   .login()
+  //   .then(() =>
+  //     dbPopulate.collection("People").updateOne(
+  //       { owner_id: mongoDbClient.authedId() },
+  //       { peopleList },
+  //       {
+  //         upsert: true
+  //       }
+  //     )
+  //   )
+  //   .catch(err => {
+  //     console.error(err);
+  //   });
   window.userName = window.localStorage.getItem("userName");
 
   let nameFound = peopleList.includes(window.userName);
@@ -284,8 +291,8 @@ class person {
     ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
     ["Hans Perskrog", "Conference", "Room", "Naturum", 1],
     ["Porten", "Conference", "Room", "Naturum", 2],
-    ["Kullanasan", "Work", "Office", "Naturum", 1],
-    ["Kulla Loa", "Work", "Office", "Naturum", 2],
+    ["Kullanäsan", "Work", "Office", "Naturum", 1],
+    ["Kulla Lå", "Work", "Office", "Naturum", 2],
     ["Lycktan", "Work", "Office", "Naturum", 3],
     ["Paradishamn", "Work", "Office", "Naturum", 4],
     ["Kringelberget", "Work", "Office", "Naturum", 5],
@@ -297,6 +304,27 @@ class person {
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
   ];
+
+  // let equipmentList;
+
+  // mongoDbClient
+  //   .login()
+  //   .then(() =>
+  //     dbPopulate
+  //       .collection("Items")
+  //       .find({ equipmentList })
+  //       .limit(100)
+  //       .execute()
+  //   )
+  //   .then(docs => {
+  //     equipmentList = docs;
+  //     console.log("Found docs", docs);
+  //     console.log("[MongoDB Stitch] Connected to Stitch");
+  //   })
+  //   .catch(err => {
+  //     console.error(err);
+  //   });
+
   for (let i in equipmentList) {
     let name = equipmentList[i][0] + equipmentList[i][4];
     item[name] = new item(equipmentList[i]);
