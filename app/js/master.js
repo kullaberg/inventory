@@ -269,7 +269,8 @@ class person {
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 3],
     ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 4],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5]
+    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
+    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
   ];
   for (let i in equipmentList) {
     let name = equipmentList[i][0] + equipmentList[i][4];
