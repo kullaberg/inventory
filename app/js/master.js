@@ -1,17 +1,34 @@
 // MongoDB
-// const stitch = require("mongodb-stitch")
-// const client = new stitch.StitchClient('inventorykstitch-cwlil');
-// const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
-// client.login().then(() =>
-//   db.collection('People').updateOne({owner_id: client.authedId()}, {$set:{number:42}}, {upsert:true})
-// ).then(() =>
-//   db.collection('<COLLECTION>').find({owner_id: client.authedId()}).limit(100).execute()
-// ).then(docs => {
-//   console.log("Found docs", docs)
-//   console.log("[MongoDB Stitch] Connected to Stitch")
-// }).catch(err => {
-//   console.error(err)
-// });
+const stitch = require("mongodb-stitch");
+const mongoDbClient = new stitch.StitchClient("inventorykstitch-cwlil");
+const dbPopulate = mongoDbClient
+  .service("mongodb", "mongodb-atlas")
+  .db("Populate");
+mongoDbClient
+  .login()
+  .then(() =>
+    dbPopulate
+      .collection("Items")
+      .updateOne(
+        { owner_id: mongoDbClient.authedId() },
+        { $set: { number: 42 } },
+        { upsert: true }
+      )
+  )
+  .then(() =>
+    dbPopulate
+      .collection("Items")
+      .find({ owner_id: mongoDbClient.authedId() })
+      .limit(100)
+      .execute()
+  )
+  .then(docs => {
+    console.log("Found docs", docs);
+    console.log("[MongoDB Stitch] Connected to Stitch");
+  })
+  .catch(err => {
+    console.error(err);
+  });
 
 let AllItems = new Set();
 
