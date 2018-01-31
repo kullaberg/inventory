@@ -16,10 +16,10 @@
 //   });
 // });
 
-
-
 const stitch = require("mongodb-stitch");
-const clientPromise = stitch.StitchClientFactory.create('inventorykstitch-cwlil');
+const clientPromise = stitch.StitchClientFactory.create(
+  "inventorykstitch-cwlil"
+);
 
 let AllItems = new Set();
 
@@ -50,94 +50,88 @@ class item {
     this.location = itemParams[3];
     this.idNumber = itemParams[4];
     this.Log = log;
-    this.description = `${this.brand} ${this.model} ${this.type} #${
-      this.idNumber
-      }`;
-    this.name = `${this.brand}${this.idNumber}`;
+
+    AllItems.add(this);
+  }
+
+  description() {
+    return `${this.brand} ${this.model} ${this.type} #${this.idNumber}`;
+  }
+  name() {
+    return `${this.brand}${this.idNumber}`;
+  }
+
+  photo() {
     switch (this.type) {
       case "Vehicle":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_car</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_car</i></div>`;
       case "Bike":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_bike</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_bike</i></div>`;
       case "Bed":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">hotel</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">hotel</i></div>`;
       case "Room":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
       case "Office":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">work</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">work</i></div>`;
       case "Camera":
-        this.photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
-        break;
+        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
 
       default:
         break;
     }
-    this.type;
-    AllItems.add(this);
   }
 
   cardHtml() {
     let item = {};
+    let itemName = this.name();
+    let itemPhoto = this.photo();
+    let itemDescription = this.description();
 
     if (
       this.Log[0].by === "Initial Log Record" ||
       !this.Log[0].checkIn === false
     ) {
-      item.button = `<a onclick="window.item['${
-        this.name
-        }'].checkOut()" id="button${
-        this.name
-        }" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
+      item.button = `<a onclick="window.item['${itemName}'].checkOut()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
     } else if (window.userName === this.Log[0].by) {
-      item.button = `<a onclick="window.item['${
-        this.name
-        }'].checkIn()" id="button${
-        this.name
-        }" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
+      item.button = `<a onclick="window.item['${itemName}'].checkIn()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
       <i class="material-icons large">assignment_turned_in</i>
     </a>`;
     } else if (window.userName !== this.Log[0].by) {
-      item.button = `<a id="button${
-        this.name
-        }" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
+      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     }
-    let htmlContent = `<div id="${this.name}" class="col s12 m6 l3">
+
+    let htmlContent = `<div id="${itemName}" class="col s12 m6 l3">
   <div class="card">
     <div class="card-image">
       ${
-      !this.photo
-        ? `<div class="blue lighten-2 display"></div>`
-        : this.photo
+        !itemPhoto
+          ? `<div class="blue lighten-2 display"></div>`
+          : itemPhoto
       }
       <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
     </div>
     <div class="card-content grey-text text-lighten description">
-      <p>${this.description}</p>
+      <p>${itemDescription}</p>
     </div>
 
     <div class="card-action">
       ${
-      this.Log[0].checkOut
-        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-        this.Log[0].by
-        } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
-        : `<div class="chip activator pointer">@ ${this.location}</div>`
+        this.Log[0].checkOut
+          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+              this.Log[0].by
+            } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
+          : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-      } Log
+    } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -150,13 +144,14 @@ class item {
   }
 
   cardRender() {
-    let domButton = document.getElementById("button" + this.name);
+    let itemName = this.name();
+    let domButton = document.getElementById("button" + itemName);
     domButton.classList.remove("scale-in");
     domButton.classList.add("scale-out");
-    let domElement = document.getElementById(this.name);
+    let domElement = document.getElementById(itemName);
     setTimeout(() => {
       domElement.outerHTML = this.cardHtml();
-      let domButton = document.getElementById("button" + this.name);
+      let domButton = document.getElementById("button" + itemName);
       domButton.classList.add("scale-out");
       setTimeout(() => {
         domButton.classList.add("scale-in");
@@ -166,7 +161,7 @@ class item {
 
   readLog() {
     let content = "";
-    this.Log.forEach(function (item) {
+    this.Log.forEach(function(item) {
       if (item.checkOut) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
@@ -215,18 +210,21 @@ class person {
 }
 
 // Populate People
-(function () {
-
-
+(function() {
   clientPromise.then(client => {
-    const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
-    client.login()
+    const db = client.service("mongodb", "mongodb-atlas").db("Populate");
+    client
+      .login()
       .then(() =>
-        db.collection('People').find().limit(1).execute()
+        db
+          .collection("People")
+          .find()
+          .limit(1)
+          .execute()
       )
       .then(docs => {
-        console.log("Found docs", docs[0].peopleList)
-        console.log("[MongoDB Stitch] Connected to Stitch")
+        console.log("Found docs", docs[0]);
+        console.log("[MongoDB Stitch] Connected to Stitch");
         window.userName = window.localStorage.getItem("userName");
 
         let nameFound = docs[0].peopleList.includes(window.userName);
@@ -247,11 +245,11 @@ class person {
           let name = docs[0].peopleList[i];
           person[name] = new person(docs[0].peopleList[i]);
         }
-      }).catch(err => {
-        console.error(err)
+      })
+      .catch(err => {
+        console.error(err);
       });
   });
-
 
   // let peopleList = [
   //   "Carlos Velasco",
@@ -269,11 +267,10 @@ class person {
   //   "Helen Thorn Jönsson",
   //   "Freddy Kristensson"
   // ];
-
 })();
 
 // Populate Equipment
-(function () {
+(function() {
   // let equipmentList = [
   //   ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
   //   ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
@@ -307,25 +304,29 @@ class person {
   //   ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
   // ];
 
-
   clientPromise.then(client => {
-    const db = client.service('mongodb', 'mongodb-atlas').db('Populate');
-    client.login()
+    const db = client.service("mongodb", "mongodb-atlas").db("Populate");
+    client
+      .login()
       .then(() =>
-        db.collection('Items').find().limit(1).execute()
+        db
+          .collection("Items")
+          .find()
+          .limit(1)
+          .execute()
       )
       .then(docs => {
         console.log("Found docs", docs[0].equipmentList);
         console.log("[MongoDB Stitch] Connected to Stitch");
         for (let i in docs[0].equipmentList) {
-          let name = docs[0].equipmentList[i][0] + docs[0].equipmentList[i][4];
+          let name =
+            docs[0].equipmentList[i][0] + docs[0].equipmentList[i][4];
           item[name] = new item(docs[0].equipmentList[i]);
         }
 
-
         window.item = item;
         // Populate DOM
-        (function () {
+        (function() {
           let listDiv = document.getElementById("list");
 
           let productionCameraContent = ``;
@@ -335,23 +336,23 @@ class person {
           let transportVehicleContent = ``;
           AllItems.forEach(item => {
             switch (item.type) {
-              case "Vehicle":
-                transportVehicleContent += item.cardHtml();
-                break;
               case "Bike":
                 transportBikeContent += item.cardHtml();
                 break;
               case "Bed":
                 spacesBedContent += item.cardHtml();
                 break;
-              case "Room":
-                spacesRoomContent += item.cardHtml();
+              case "Vehicle":
+                transportVehicleContent += item.cardHtml();
                 break;
-              case "Office":
+              case "Room":
                 spacesRoomContent += item.cardHtml();
                 break;
               case "Camera":
                 productionCameraContent += item.cardHtml();
+                break;
+              case "Office":
+                spacesRoomContent += item.cardHtml();
                 break;
 
               default:
@@ -371,10 +372,9 @@ class person {
         window.item["GoPro3"].checkOut("Daniel Åberg");
         window.item["Nikon1"].checkOut("Daniel Åberg");
         window.item["Opel3"].checkOut("Daniel Åberg");
-      }).catch(err => {
-        console.error(err)
+      })
+      .catch(err => {
+        console.error(err);
       });
   });
-
-
 })();
