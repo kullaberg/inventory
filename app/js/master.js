@@ -9,7 +9,7 @@
   };
   let instance1 = M.Datepicker.init(dateOut, options);
   let instance2 = M.Datepicker.init(dateIn, options);
-  // dateOut.value = new Date().toDateString();
+  dateOut.value = new Date().toDateString();
   dateIn.value = new Date().toDateString();
 })(window, document);
 
