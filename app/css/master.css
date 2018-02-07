@@ -59,10 +59,11 @@ header {
   top: 0;
   width: 100%;
   z-index: 4;
+  height: 5rem;
 }
 
 main {
-  margin: 10rem 0;
+  margin: 6rem 0;
 }
 
 

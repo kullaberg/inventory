@@ -27,8 +27,8 @@ class item {
     log = [
       {
         by: "Initial Log Record",
-        dateIn: Date.now(),
-        dateOut: Date.now()
+        dateOut: Date.parse("1 / 1 / 2017"),
+        dateIn: Date.parse("1 / 2 / 2017")
       }
     ]
   ) {
@@ -76,7 +76,7 @@ class item {
     let available = true;
     reservationsArray.forEach((dateRange) => {
 
-      if (dateArray[0] >= dateRange.dateOut && dateArray[0] <= dateRange.dateIn || dateArray[1] >= dateRange.dateOut && dateArray[1] <= dateRange.dateIn) {
+      if (dateArray[0] >= dateRange.dateOut && dateArray[0] <= dateRange.dateIn || dateArray[1] >= dateRange.dateOut && dateArray[1] <= dateRange.dateIn || dateArray[0] <= dateRange.dateOut && dateArray[1] >= dateRange.dateIn) {
         available = false;
       } else if (dateArray[1] <= dateArray[0]) {
         available = false;
@@ -97,11 +97,11 @@ class item {
       item.button = `<a onclick="window.item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
-    } else if (window.userName === this.Log[0].by && this.available) {
-      item.button = `<a onclick="window.item['${itemName}'].checkIn()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
-      <i class="material-icons large">assignment_turned_in</i>
+    } else if (window.userName === this.Log[0].by) {
+      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-2 scale-transition">
+      <i class="material-icons large">lock</i>
     </a>`;
-    } else if (this.available === false) {
+    } else {
       item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
@@ -203,11 +203,9 @@ class item {
         dateIn: dateIn,
         by: user || window.userName,
       };
-      console.log("[Item Available}", true)
       this.Log.unshift(reservation);
       this.cardRender();
     } else {
-      console.log("[Item Available}", false)
     }
   }
 
@@ -436,8 +434,10 @@ populateItems();
   dateIn.value = tomorrow.toDateString();
   instance1.setDate(new Date(today));
   instance2.setDate(new Date(tomorrow));
-  dateOut.addEventListener('change', () => { refreshItems() });
-  dateIn.addEventListener('change', () => { refreshItems() });
+  dateOut.addEventListener('change', () => { refreshItems() }, false);
+  dateOut.addEventListener('click', (event) => { event.preventDefault() }, false);
+  dateIn.addEventListener('change', () => { refreshItems() }, false);
+  dateIn.addEventListener('click', (event) => { event.preventDefault() }, false);
 })(window, document);
 
 
