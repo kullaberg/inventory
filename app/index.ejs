@@ -14,10 +14,16 @@ const site = {
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, minimum-scale=0.0, maximum-scale=10.0">
     <link rel="canonical" href="${ site.github }" />
     <link rel="manifest" href="${ site.github }manifest.json">
+    <style>
+      .hide {
+        display: none;
+      }
+
+    </style>
   </head>
 
   <body class="grey lighten-4">
-    <header class="blue lighten-2 z-depth-3">
+    <header id="header" class="blue lighten-2 z-depth-3 hide">
       <div class="row nav-wrapper">
         <div class="input-field col s6">
           <input id="dateOut" type="text" class="white-text datepicker">

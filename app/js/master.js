@@ -1,4 +1,5 @@
 (function (window, document) {
+  document.getElementById('header').classList.remove('hide');
   let M = require("./../../node_modules/materialize-css/dist/js/materialize");
   let dateOut = document.getElementById('dateOut')
   let dateIn = document.getElementById('dateIn')
@@ -10,8 +11,8 @@
   let today = new Date();
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  let instance1 = M.Datepicker.init(dateOut, options);
-  let instance2 = M.Datepicker.init(dateIn, options);
+  M.Datepicker.init(dateOut, options);
+  M.Datepicker.init(dateIn, options);
   dateOut.value = today.toDateString();
   dateIn.value = tomorrow.toDateString();
 })(window, document);
