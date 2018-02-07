@@ -36,20 +36,17 @@ module.exports = function e(env) {
         },
         {
           test: /\.(scss|sass|css)$/,
-          use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  minimize: false,
-                  sourceMap: false,
-                  importLoaders: 1
-                }
-              },
-              "postcss-loader"
-            ]
-          })
+          use: [
+            {
+              loader: "style-loader" // creates style nodes from JS strings
+            },
+            {
+              loader: "css-loader" // translates CSS into CommonJS
+            },
+            {
+              loader: "sass-loader" // compiles Sass to CSS
+            }
+          ]
         },
         {
           test: /\.(gif|png|jpe?g)$/i,
@@ -81,7 +78,7 @@ module.exports = function e(env) {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: "Front-End Challenge",
+        title: "Resource Management",
         template: "./app/index.ejs"
       }),
       new ExtractTextPlugin("./css/[name].css?[chunkhash]"),
