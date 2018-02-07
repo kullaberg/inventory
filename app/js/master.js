@@ -1,21 +1,5 @@
-(function (window, document) {
-  document.getElementById('header').classList.remove('hide');
-  let M = require("./../../node_modules/materialize-css/dist/js/materialize");
-  let dateOut = document.getElementById('dateOut')
-  let dateIn = document.getElementById('dateIn')
-  let options = {
-    format: 'ddd mmm dd yyyy',
-    setDefaultDate: true,
-    defaultDate: new Date()
-  };
-  let today = new Date();
-  let tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  M.Datepicker.init(dateOut, options);
-  M.Datepicker.init(dateIn, options);
-  dateOut.value = today.toDateString();
-  dateIn.value = tomorrow.toDateString();
-})(window, document);
+let AllItems = new Set();
+
 
 
 // MongoDB
@@ -25,7 +9,6 @@ const clientPromise = stitch.StitchClientFactory.create(
   "inventorykstitch-cwlil"
 );
 
-let AllItems = new Set();
 
 class item {
   /**
@@ -44,7 +27,8 @@ class item {
     log = [
       {
         by: "Initial Log Record",
-        time: Date.now()
+        dateIn: Date.now(),
+        dateOut: Date.now()
       }
     ]
   ) {
@@ -85,6 +69,22 @@ class item {
     }
   }
 
+  get available() {
+    let dateArray = [Date.parse(document.getElementById('dateOut').value), Date.parse(document.getElementById('dateIn').value)];
+    let reservationsArray = this.Log;
+
+    let available = true;
+    reservationsArray.forEach((dateRange) => {
+
+      if (dateArray[0] >= dateRange.dateOut && dateArray[0] <= dateRange.dateIn || dateArray[1] >= dateRange.dateOut && dateArray[1] <= dateRange.dateIn) {
+        available = false;
+      } else if (dateArray[1] <= dateArray[0]) {
+        available = false;
+      }
+    });
+    return available;
+  }
+
   cardHtml() {
     let item = {};
     let itemName = this.name();
@@ -92,17 +92,16 @@ class item {
     let itemDescription = this.description();
 
     if (
-      this.Log[0].by === "Initial Log Record" ||
-      !this.Log[0].checkIn === false
+      this.available === true
     ) {
-      item.button = `<a onclick="window.item['${itemName}'].checkOut()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
+      item.button = `<a onclick="window.item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
-    } else if (window.userName === this.Log[0].by) {
+    } else if (window.userName === this.Log[0].by && this.available) {
       item.button = `<a onclick="window.item['${itemName}'].checkIn()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-1 scale-transition">
       <i class="material-icons large">assignment_turned_in</i>
     </a>`;
-    } else if (window.userName !== this.Log[0].by) {
+    } else if (this.available === false) {
       item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
@@ -125,10 +124,10 @@ class item {
 
     <div class="card-action">
       ${
-      this.Log[0].checkOut
+      !this.available
         ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
         this.Log[0].by
-        } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
+        } ${new Date(this.Log[0].dateOut).toLocaleDateString()} - ${new Date(this.Log[0].dateIn).toLocaleDateString()}</div>`
         : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
@@ -150,26 +149,30 @@ class item {
   cardRender() {
     let itemName = this.name();
     let domButton = document.getElementById("button" + itemName);
+    domButton.classList.remove("scale-out");
     domButton.classList.remove("scale-in");
     domButton.classList.add("scale-out");
     let domElement = document.getElementById(itemName);
     setTimeout(() => {
-      domElement.outerHTML = this.cardHtml();
-      let domButton = document.getElementById("button" + itemName);
-      domButton.classList.add("scale-out");
-      setTimeout(() => {
-        domButton.classList.add("scale-in");
-      }, 100);
+      if (domElement.outerHTML.length > 3) {
+        domElement.outerHTML = this.cardHtml();
+        let domButton = document.getElementById("button" + itemName);
+        domButton.classList.add("scale-out");
+        setTimeout(() => {
+          domButton.classList.add("scale-in");
+        }, 100);
+      }
     }, 100);
+
   }
 
   readLog() {
     let content = "";
     this.Log.forEach(function (item) {
-      if (item.checkOut) {
+      if (item.dateOut && item.dateIn) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
-      } else if (item.checkIn) {
+      } else if (!item.dateOut) {
         content +=
           '<div class="chip orange lighten-2 white-text"><i class="material-icons checks">assignment_turned_in</i> ';
       } else if (item.by === "Initial Log Record") {
@@ -177,33 +180,110 @@ class item {
           '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add_circle</i> ';
       }
       content += `${item.by} ${new Date(
-        item.time
+        item.dateOut
+      ).toLocaleDateString()} - ${new Date(
+        item.dateIn
       ).toLocaleDateString()} </div>
       `;
     });
     return content;
   }
 
+  reserve(user) {
+
+    if (this.available) {
+      let dateOut = Date.parse(document.getElementById('dateOut').value);
+      if (isNaN(dateOut)) { dateOut = Date.now() };
+      let dateIn = Date.parse(document.getElementById('dateIn').value);
+      let tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      if (isNaN(dateIn)) { dateIn = new Date(tomorrow) };
+      let reservation = {
+        dateOut: dateOut,
+        dateIn: dateIn,
+        by: user || window.userName,
+      };
+      console.log("[Item Available}", true)
+      this.Log.unshift(reservation);
+      this.cardRender();
+    } else {
+      console.log("[Item Available}", false)
+    }
+  }
+
+
+
   checkOut(user) {
+    let dateOut = Date.parse(document.getElementById('dateOut').value);
+    if (isNaN(dateOut)) { dateOut = Date.now() };
     let checkOut = {
-      checkOut: {},
       by: user || window.userName,
-      time: Date.now()
+      dateOut: dateOut,
     };
     this.Log.unshift(checkOut);
     this.cardRender();
   }
 
   checkIn(user) {
+    let dateIn = Date.parse(document.getElementById('dateIn').value);
+    if (isNaN(dateIn)) { dateIn = Date.now() };
     let checkIn = {
-      checkIn: {},
       by: user || window.userName,
-      time: Date.now()
+      dateIn: dateIn,
     };
     this.Log.unshift(checkIn);
     this.cardRender();
   }
 }
+
+let refreshItems = function () {
+  AllItems.forEach(item => {
+    item.cardRender()
+  });
+}
+
+const buildItems = function (time = 0) {
+
+  let listDiv = document.getElementById("list");
+
+  let productionCameraContent = ``;
+  let spacesBedContent = ``;
+  let spacesRoomContent = ``;
+  let transportBikeContent = ``;
+  let transportVehicleContent = ``;
+  AllItems.forEach(item => {
+    switch (item.type) {
+      case "Bike":
+        transportBikeContent += item.cardHtml();
+        break;
+      case "Bed":
+        spacesBedContent += item.cardHtml();
+        break;
+      case "Vehicle":
+        transportVehicleContent += item.cardHtml();
+        break;
+      case "Room":
+        spacesRoomContent += item.cardHtml();
+        break;
+      case "Camera":
+        productionCameraContent += item.cardHtml();
+        break;
+      case "Office":
+        spacesRoomContent += item.cardHtml();
+        break;
+
+      default:
+        break;
+    }
+  });
+  listDiv.innerHTML =
+    spacesRoomContent +
+    spacesBedContent +
+    transportBikeContent +
+    transportVehicleContent +
+    productionCameraContent;
+}
+
 
 let People = new Set();
 class person {
@@ -274,7 +354,7 @@ class person {
 })(window);
 
 // Populate Equipment
-function populateItems() {
+const populateItems = function () {
   let equipmentList = [
     ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
     ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
@@ -313,52 +393,12 @@ function populateItems() {
   }
 
   window.item = item;
-
-  let listDiv = document.getElementById("list");
-
-  let productionCameraContent = ``;
-  let spacesBedContent = ``;
-  let spacesRoomContent = ``;
-  let transportBikeContent = ``;
-  let transportVehicleContent = ``;
-  AllItems.forEach(item => {
-    switch (item.type) {
-      case "Bike":
-        transportBikeContent += item.cardHtml();
-        break;
-      case "Bed":
-        spacesBedContent += item.cardHtml();
-        break;
-      case "Vehicle":
-        transportVehicleContent += item.cardHtml();
-        break;
-      case "Room":
-        spacesRoomContent += item.cardHtml();
-        break;
-      case "Camera":
-        productionCameraContent += item.cardHtml();
-        break;
-      case "Office":
-        spacesRoomContent += item.cardHtml();
-        break;
-
-      default:
-        break;
-    }
-  });
-  listDiv.innerHTML =
-    spacesRoomContent +
-    spacesBedContent +
-    transportBikeContent +
-    transportVehicleContent +
-    productionCameraContent;
-
-  window.item["Yosemite1"].checkOut("Carlos Velasco");
-  window.item["Yosemite2"].checkOut("Cornelius Svarrer");
-  window.item["GoPro3"].checkOut("Daniel Åberg");
-  window.item["Nikon1"].checkOut("Daniel Åberg");
-  window.item["Opel3"].checkOut("Daniel Åberg");
-
+  buildItems();
+  window.item["Yosemite1"].reserve("Carlos Velasco");
+  window.item["Yosemite2"].reserve("Cornelius Svarrer");
+  window.item["GoPro3"].reserve("Daniel Åberg");
+  window.item["Nikon1"].reserve("Daniel Åberg");
+  window.item["Opel3"].reserve("Daniel Åberg");
   let uploads = [];
   AllItems.forEach(function (item) {
     clientPromise.then(client => {
@@ -377,3 +417,27 @@ function populateItems() {
 }
 
 populateItems();
+
+// Navbar
+(function (window, document) {
+  let dateOut = document.getElementById('dateOut')
+  let dateIn = document.getElementById('dateIn')
+  document.getElementById('header').classList.remove('hide');
+  let M = require("./../../node_modules/materialize-css/dist/js/materialize");
+  let today = new Date();
+  let tomorrow = new Date();
+  let options = {
+    format: 'ddd mmm dd yyyy',
+  };
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  let instance1 = M.Datepicker.init(dateOut, options);
+  let instance2 = M.Datepicker.init(dateIn, options);
+  dateOut.value = today.toDateString();
+  dateIn.value = tomorrow.toDateString();
+  instance1.setDate(new Date(today));
+  instance2.setDate(new Date(tomorrow));
+  dateOut.addEventListener('change', () => { refreshItems() });
+  dateIn.addEventListener('change', () => { refreshItems() });
+})(window, document);
+
+
