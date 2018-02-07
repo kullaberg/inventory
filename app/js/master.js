@@ -7,10 +7,13 @@
     setDefaultDate: true,
     defaultDate: new Date()
   };
+  let today = new Date();
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   let instance1 = M.Datepicker.init(dateOut, options);
   let instance2 = M.Datepicker.init(dateIn, options);
-  dateOut.value = new Date().toDateString();
-  dateIn.value = new Date().toDateString();
+  dateOut.value = today.toDateString();
+  dateIn.value = tomorrow.toDateString();
 })(window, document);
 
 
