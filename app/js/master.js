@@ -1,3 +1,19 @@
+(function (window, document) {
+  let M = require("./../../node_modules/materialize-css/dist/js/materialize");
+  let dateOut = document.getElementById('dateOut')
+  let dateIn = document.getElementById('dateIn')
+  let options = {
+    format: 'ddd mmm dd yyyy',
+    setDefaultDate: true,
+    defaultDate: new Date()
+  };
+  let instance1 = M.Datepicker.init(dateOut, options);
+  let instance2 = M.Datepicker.init(dateIn, options);
+  // dateOut.value = new Date().toDateString();
+  dateIn.value = new Date().toDateString();
+})(window, document);
+
+
 // MongoDB
 
 const stitch = require("mongodb-stitch");
@@ -92,9 +108,9 @@ class item {
   <div class="card">
     <div class="card-image">
       ${
-        !itemPhoto
-          ? `<div class="blue lighten-2 display"></div>`
-          : itemPhoto
+      !itemPhoto
+        ? `<div class="blue lighten-2 display"></div>`
+        : itemPhoto
       }
       <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
@@ -105,17 +121,17 @@ class item {
 
     <div class="card-action">
       ${
-        this.Log[0].checkOut
-          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-              this.Log[0].by
-            } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
-          : `<div class="chip activator pointer">@ ${this.location}</div>`
+      this.Log[0].checkOut
+        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+        this.Log[0].by
+        } ${new Date(this.Log[0].time).toLocaleDateString()} </div>`
+        : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-    } Log
+      } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -145,7 +161,7 @@ class item {
 
   readLog() {
     let content = "";
-    this.Log.forEach(function(item) {
+    this.Log.forEach(function (item) {
       if (item.checkOut) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
@@ -194,7 +210,7 @@ class person {
 }
 
 // Populate People
-(function(window) {
+(function (window) {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -340,7 +356,7 @@ function populateItems() {
   window.item["Opel3"].checkOut("Daniel Åberg");
 
   let uploads = [];
-  AllItems.forEach(function(item) {
+  AllItems.forEach(function (item) {
     clientPromise.then(client => {
       const db = client
         .service("mongodb", "mongodb-atlas")
