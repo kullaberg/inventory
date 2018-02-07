@@ -90,19 +90,21 @@ class item {
     let itemName = this.name();
     let itemPhoto = this.photo();
     let itemDescription = this.description();
-
+    if (!window.userName) {
+      window.userName = window.localStorage.getItem("userName");
+    }
     if (
       this.available === true
     ) {
       item.button = `<a onclick="window.item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
-    } else if (window.userName === this.Log[0].by) {
-      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light orange lighten-2 scale-transition">
+    } else if (window.userName === this.Log[0].by && this.available === false) {
+      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab purple accent-2 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     } else {
-      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled purple waves-effect waves-light lighten-1 scale-transition">
+      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled lighten-2 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     }
@@ -197,11 +199,11 @@ class item {
       let dateIn = Date.parse(document.getElementById('dateIn').value);
       let tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      if (isNaN(dateIn)) { dateIn = new Date(tomorrow) };
+      if (isNaN(dateIn)) { dateIn = Date.parse(tomorrow) };
       let reservation = {
+        by: user || window.userName,
         dateOut: dateOut,
         dateIn: dateIn,
-        by: user || window.userName,
       };
       this.Log.unshift(reservation);
       this.cardRender();
@@ -418,26 +420,31 @@ populateItems();
 
 // Navbar
 (function (window, document) {
+  document.getElementById('header').classList.remove('hide');
   let dateOut = document.getElementById('dateOut')
   let dateIn = document.getElementById('dateIn')
-  document.getElementById('header').classList.remove('hide');
   let M = require("./../../node_modules/materialize-css/dist/js/materialize");
   let today = new Date();
   let tomorrow = new Date();
-  let options = {
+  let options1 = {
     format: 'ddd mmm dd yyyy',
+    minDate: today,
+    container: 'body'
+  };
+  let options2 = {
+    format: 'ddd mmm dd yyyy',
+    minDate: tomorrow,
+    container: 'body'
   };
   tomorrow.setDate(tomorrow.getDate() + 1);
-  let instance1 = M.Datepicker.init(dateOut, options);
-  let instance2 = M.Datepicker.init(dateIn, options);
+  let instance1 = M.Datepicker.init(dateOut, options1);
+  let instance2 = M.Datepicker.init(dateIn, options2);
   dateOut.value = today.toDateString();
   dateIn.value = tomorrow.toDateString();
   instance1.setDate(new Date(today));
   instance2.setDate(new Date(tomorrow));
   dateOut.addEventListener('change', () => { refreshItems() }, false);
-  dateOut.addEventListener('click', (event) => { event.preventDefault() }, false);
   dateIn.addEventListener('change', () => { refreshItems() }, false);
-  dateIn.addEventListener('click', (event) => { event.preventDefault() }, false);
 })(window, document);
 
 
