@@ -198,7 +198,7 @@ class item {
       if (isNaN(dateOut)) { dateOut = Date.now() };
       let dateIn = Date.parse(document.getElementById('dateIn').value);
       let tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setDate(tomorrow.getDate() + 360);
       if (isNaN(dateIn)) { dateIn = Date.parse(tomorrow) };
       let reservation = {
         by: user || window.userName,
@@ -236,7 +236,8 @@ class item {
   }
 }
 
-let refreshItems = function () {
+const refreshItems = function () {
+
   AllItems.forEach(item => {
     item.cardRender()
   });
@@ -426,6 +427,7 @@ populateItems();
   let M = require("./../../node_modules/materialize-css/dist/js/materialize");
   let today = new Date();
   let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   let options1 = {
     format: 'ddd mmm dd yyyy',
     minDate: today,
@@ -436,13 +438,12 @@ populateItems();
     minDate: tomorrow,
     container: 'body'
   };
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  let instance1 = M.Datepicker.init(dateOut, options1);
-  let instance2 = M.Datepicker.init(dateIn, options2);
+  window.instance1 = M.Datepicker.init(dateOut, options1);
+  window.instance2 = M.Datepicker.init(dateIn, options2);
   dateOut.value = today.toDateString();
   dateIn.value = tomorrow.toDateString();
-  instance1.setDate(new Date(today));
-  instance2.setDate(new Date(tomorrow));
+  window.instance1.setDate(new Date(today));
+  window.instance2.setDate(new Date(tomorrow));
   dateOut.addEventListener('change', () => { refreshItems() }, false);
   dateIn.addEventListener('change', () => { refreshItems() }, false);
 })(window, document);
