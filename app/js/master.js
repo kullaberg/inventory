@@ -243,7 +243,7 @@ const refreshItems = function () {
   });
 }
 
-const buildItems = function (time = 0) {
+const buildItems = function () {
 
   let listDiv = document.getElementById("list");
 
@@ -438,12 +438,12 @@ populateItems();
     minDate: tomorrow,
     container: 'body'
   };
-  window.instance1 = M.Datepicker.init(dateOut, options1);
-  window.instance2 = M.Datepicker.init(dateIn, options2);
+  let instance1 = M.Datepicker.init(dateOut, options1);
+  let instance2 = M.Datepicker.init(dateIn, options2);
   dateOut.value = today.toDateString();
   dateIn.value = tomorrow.toDateString();
-  window.instance1.setDate(new Date(today));
-  window.instance2.setDate(new Date(tomorrow));
+  instance1.setDate(new Date(today));
+  instance2.setDate(new Date(tomorrow));
   dateOut.addEventListener('change', () => { refreshItems() }, false);
   dateIn.addEventListener('change', () => { refreshItems() }, false);
 })(window, document);
