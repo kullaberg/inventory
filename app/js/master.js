@@ -100,7 +100,7 @@ class item {
       <i class="material-icons large">assignment</i>
     </a> `;
     } else if (window.userName === this.Log[0].by && this.available === false) {
-      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab purple accent-2 scale-transition">
+      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     } else {
