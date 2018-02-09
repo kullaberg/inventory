@@ -411,7 +411,7 @@ const findItems = function () {
           console.log("[Difference]", window.same);
           window.foundItems = foundItems;
           console.log("[Found Items]", foundItems);
-
+          AllItems.clear();
           for (let i in foundItems) {
             let name = foundItems[i]["_id"];
             item[name] = new item(
@@ -425,12 +425,12 @@ const findItems = function () {
               foundItems[i].Log
             );
           }
-          if (!window.item) {
-            window.item = item;
-            buildItems();
-          } else {
-            refreshItems();
-          }
+          // if (!window.item) {
+          window.item = item;
+          buildItems();
+          // } else {
+          //   refreshItems();
+          // }
         } else {
           console.log("[No changes]");
         }
@@ -485,7 +485,7 @@ document.addEventListener("focus", () => findItems(), false);
 
 setInterval(function () {
   // body
-  if (document.hasFocus()) {
-    findItems();
-  }
-}, 10000);
+  // if (document.hasFocus()) {
+  findItems();
+  // }
+}, 5000);
