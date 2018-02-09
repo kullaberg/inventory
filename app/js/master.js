@@ -458,26 +458,31 @@ const findItems = function() {
           .execute()
       )
       .then(foundItems => {
-        console.log("[Found Items]", foundItems);
+        if (window.foundItems != foundItems) {
+          window.foundItems = foundItems;
+          console.log("[Found Items]", foundItems);
 
-        for (let i in foundItems) {
-          let name = foundItems[i]["_id"];
-          item[name] = new item(
-            [
-              foundItems[i].brand,
-              foundItems[i].model,
-              foundItems[i].type,
-              foundItems[i].location,
-              foundItems[i].idNumber
-            ],
-            foundItems[i].Log
-          );
-        }
-        if (!window.item) {
-          window.item = item;
-          buildItems();
+          for (let i in foundItems) {
+            let name = foundItems[i]["_id"];
+            item[name] = new item(
+              [
+                foundItems[i].brand,
+                foundItems[i].model,
+                foundItems[i].type,
+                foundItems[i].location,
+                foundItems[i].idNumber
+              ],
+              foundItems[i].Log
+            );
+          }
+          if (!window.item) {
+            window.item = item;
+            buildItems();
+          } else {
+            refreshItems();
+          }
         } else {
-          refreshItems();
+          console.log("[No changes]");
         }
       });
   });
@@ -525,6 +530,8 @@ findItems();
     false
   );
 })(window, document);
+
+document.addEventListener("focus", () => findItems(), false);
 
 setInterval(function() {
   // body
