@@ -107,7 +107,7 @@ class item {
       window.userName === this.Log[0].by &&
       this.available === false
     ) {
-      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
+      item.button = `<a id="button${itemName}" onclick="window.item['${itemName}'].removeRecord()" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     } else {
@@ -262,6 +262,28 @@ class item {
     };
     this.Log.unshift(checkIn);
     this.cardRender();
+  }
+
+  removeRecord() {
+    if (this.Log[0].by === window.userName) {
+      this.Log.shift();
+      clientPromise.then(client => {
+        const db = client
+          .service("mongodb", "mongodb-atlas")
+          .db("Populate");
+        client
+          .login()
+          .then(() =>
+            db
+              .collection("Items")
+              .updateOne({ _id: this._id }, { $set: { Log: this.Log } })
+          )
+          .then(result => {
+            console.log("[Removed]", result);
+            this.cardRender();
+          });
+      });
+    }
   }
 }
 
