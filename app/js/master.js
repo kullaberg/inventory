@@ -8,17 +8,6 @@ const clientPromise = stitch.StitchClientFactory.create(
 );
 
 class item {
-  /**
-   * Creates an instance of item.
-   * @param {string} [itemParams=["Name", "Model", "Type", "Location", 1]]
-   * @param {string} [log=[
-   *       {
-   *         by: "Initial Log Record",
-   *         time: Date.now()
-   *       }
-   *     ]]
-   * @memberof item
-   */
   constructor(
     itemParams = ["Name", "Model", "Type", "Location", 1],
     log = [
@@ -126,9 +115,9 @@ class item {
   <div class="card">
     <div class="card-image">
       ${
-        !itemPhoto
-          ? `<div class="blue lighten-2 display"></div>`
-          : itemPhoto
+      !itemPhoto
+        ? `<div class="blue lighten-2 display"></div>`
+        : itemPhoto
       }
       <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
@@ -139,17 +128,17 @@ class item {
 
     <div class="card-action">
       ${
-        !this.available
-          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-              this.Log[0].by
-            } ${dateOut} - ${dateIn}</div>`
-          : `<div class="chip activator pointer">@ ${this.location}</div>`
+      !this.available
+        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+        this.Log[0].by
+        } ${dateOut} - ${dateIn}</div>`
+        : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-    } Log
+      } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -182,7 +171,7 @@ class item {
 
   readLog() {
     let content = "";
-    this.Log.forEach(function(item) {
+    this.Log.forEach(function (item) {
       let dateOut = new Date(parseInt(item.dateOut)).toLocaleDateString();
       let dateIn = new Date(parseInt(item.dateIn)).toLocaleDateString();
       if (item.dateOut && item.dateIn) {
@@ -287,13 +276,13 @@ class item {
   }
 }
 
-const refreshItems = function() {
+const refreshItems = function () {
   AllItems.forEach(item => {
     item.cardRender();
   });
 };
 
-const buildItems = function() {
+const buildItems = function () {
   let listDiv = document.getElementById("list");
 
   let productionCameraContent = ``;
@@ -343,7 +332,7 @@ class person {
 }
 
 // Populate People
-(function(window) {
+(function (window) {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -402,72 +391,7 @@ class person {
   // ];
 })(window);
 
-// Populate Equipment
-const populateItems = function() {
-  let equipmentList = [
-    ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
-    ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 1],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 2],
-    ["GoPro", "Hero 3+", "Camera", "Naturum Loft", 3],
-    ["Segway", "X2 SE Scooter", "Vehicle", "Naturum Pannrum", 1],
-    ["Opel", "White Car", "Vehicle", "Naturum Parkering", 1],
-    ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 2],
-    ["Opel", "White Car", "Vehicle", "Förvaltning Parkering", 3],
-    ["Golf", "Cart", "Vehicle", "Förvaltning Parkering", 1],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 1],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 2],
-    ["Yosemite", "MTB eBike", "Bike", "Förvaltning", 3],
-    ["Yosemite", "Road eBike", "Bike", "Naturum Pannrum", 4],
-    ["FatTire", "MTB eBike", "Bike", "Naturum Pannrum", 1],
-    ["Falknästet", "Conference", "Room", "Kullens Fyr", 1],
-    ["Hans Perskrog", "Conference", "Room", "Naturum", 1],
-    ["Porten", "Conference", "Room", "Naturum", 2],
-    ["Kullanäsan", "Work", "Office", "Naturum", 1],
-    ["Kulla Lå", "Work", "Office", "Naturum", 2],
-    ["Lycktan", "Work", "Office", "Naturum", 3],
-    ["Paradishamn", "Work", "Office", "Naturum", 4],
-    ["Kringelberget", "Work", "Office", "Naturum", 5],
-    ["Förvaltning", "Accomodation", "Bed", "Förvaltning", 1],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 1],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 2],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 3],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 4],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 5],
-    ["Kullaljung", "Accomodation", "Bed", "Kullaljung stugan", 6]
-  ];
-  for (let i in equipmentList) {
-    let name = equipmentList[i][0] + equipmentList[i][4];
-    item[name] = new item(equipmentList[i]);
-  }
-
-  window.item = item;
-  buildItems();
-  window.item["Yosemite1"].reserve("Carlos Velasco");
-  window.item["Yosemite2"].reserve("Cornelius Svarrer");
-  window.item["GoPro3"].reserve("Daniel Åberg");
-  window.item["Nikon1"].reserve("Daniel Åberg");
-  window.item["Opel3"].reserve("Daniel Åberg");
-  let uploads = [];
-  AllItems.forEach(function(item) {
-    clientPromise.then(client => {
-      const db = client
-        .service("mongodb", "mongodb-atlas")
-        .db("Populate");
-      client
-        .login()
-        .then(() => db.collection("Items").insertOne(item))
-        .then(result => {
-          uploads.unshift(result);
-        });
-    });
-  });
-  console.log("[Uploaded]", uploads);
-};
-
-// populateItems();
-
-const findItems = function() {
+const findItems = function () {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -480,37 +404,36 @@ const findItems = function() {
           .execute()
       )
       .then(foundItems => {
-        // const a = window.foundItems || foundItems;
-        // const b = foundItems;
-        // const b1 = new Set(b);
-        // window.difference = [...new Set([...a].filter(x => !b1.has(x)))];
-        // if (window.difference.length > 0 || !window.foundItems) {
-        //   console.log("[Difference]", difference);
-        //   window.foundItems = foundItems;
-        console.log("[Found Items]", foundItems);
+        const a = JSON.stringify(window.foundItems || foundItems);
+        const b = JSON.stringify(foundItems);
+        const same = Object.is(a, b);
+        if (same === false || !window.foundItems) {
+          console.log("[Difference]", window.same);
+          window.foundItems = foundItems;
+          console.log("[Found Items]", foundItems);
 
-        for (let i in foundItems) {
-          let name = foundItems[i]["_id"];
-          item[name] = new item(
-            [
-              foundItems[i].brand,
-              foundItems[i].model,
-              foundItems[i].type,
-              foundItems[i].location,
-              foundItems[i].idNumber
-            ],
-            foundItems[i].Log
-          );
-        }
-        if (!window.item) {
-          window.item = item;
-          buildItems();
+          for (let i in foundItems) {
+            let name = foundItems[i]["_id"];
+            item[name] = new item(
+              [
+                foundItems[i].brand,
+                foundItems[i].model,
+                foundItems[i].type,
+                foundItems[i].location,
+                foundItems[i].idNumber
+              ],
+              foundItems[i].Log
+            );
+          }
+          if (!window.item) {
+            window.item = item;
+            buildItems();
+          } else {
+            refreshItems();
+          }
         } else {
-          refreshItems();
+          console.log("[No changes]");
         }
-        // } else {
-        //   console.log("[No changes]");
-        // }
       });
   });
 };
@@ -518,7 +441,7 @@ const findItems = function() {
 findItems();
 
 // Navbar
-(function(window, document) {
+(function (window, document) {
   document.getElementById("header").classList.remove("hide");
   let dateOut = document.getElementById("dateOut");
   let dateIn = document.getElementById("dateIn");
@@ -560,7 +483,7 @@ findItems();
 
 document.addEventListener("focus", () => findItems(), false);
 
-setInterval(function() {
+setInterval(function () {
   // body
   if (document.hasFocus()) {
     findItems();
