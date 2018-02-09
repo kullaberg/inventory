@@ -345,8 +345,7 @@ class person {
           .execute()
       )
       .then(docs => {
-        console.log("[Found People]", docs[0]);
-        console.log("[MongoDB Stitch] Connected to Stitch");
+        // console.log("[Found People]", docs[0]);
         window.userName = window.localStorage.getItem("userName");
 
         let nameFound = docs[0].peopleList.includes(window.userName);
@@ -404,13 +403,13 @@ const findItems = function () {
           .execute()
       )
       .then(foundItems => {
-        const a = JSON.stringify(window.foundItems || foundItems);
-        const b = JSON.stringify(foundItems);
+        const a = window.a || JSON.stringify(foundItems).length;
+        const b = JSON.stringify(foundItems).length;
         const same = Object.is(a, b);
-        if (same === false || !window.foundItems) {
-          console.log("[Difference]", same);
-          window.foundItems = foundItems;
-          console.log("[Found Items]", foundItems);
+        console.log("[Similar]", same);
+        if (same === false || !window.a) {
+          window.a = a;
+          // console.log("[Found Items]", foundItems);
           AllItems.clear();
           for (let i in foundItems) {
             let name = foundItems[i]["_id"];
@@ -431,8 +430,6 @@ const findItems = function () {
           // } else {
           //   refreshItems();
           // }
-        } else {
-          console.log("[No changes]");
         }
       });
   });
