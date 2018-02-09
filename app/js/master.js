@@ -1,14 +1,11 @@
 let AllItems = new Set();
 
-
-
 // MongoDB
 
 const stitch = require("mongodb-stitch");
 const clientPromise = stitch.StitchClientFactory.create(
   "inventorykstitch-cwlil"
 );
-
 
 class item {
   /**
@@ -38,6 +35,7 @@ class item {
     this.location = itemParams[3];
     this.idNumber = itemParams[4];
     this.Log = log;
+    this._id = `${this.brand}${this.idNumber}`;
 
     AllItems.add(this);
   }
@@ -70,13 +68,22 @@ class item {
   }
 
   get available() {
-    let dateArray = [Date.parse(document.getElementById('dateOut').value), Date.parse(document.getElementById('dateIn').value)];
+    let dateArray = [
+      Date.parse(document.getElementById("dateOut").value),
+      Date.parse(document.getElementById("dateIn").value)
+    ];
     let reservationsArray = this.Log;
 
     let available = true;
-    reservationsArray.forEach((dateRange) => {
-
-      if (dateArray[0] >= dateRange.dateOut && dateArray[0] <= dateRange.dateIn || dateArray[1] >= dateRange.dateOut && dateArray[1] <= dateRange.dateIn || dateArray[0] <= dateRange.dateOut && dateArray[1] >= dateRange.dateIn) {
+    reservationsArray.forEach(dateRange => {
+      if (
+        (dateArray[0] >= dateRange.dateOut &&
+          dateArray[0] <= dateRange.dateIn) ||
+        (dateArray[1] >= dateRange.dateOut &&
+          dateArray[1] <= dateRange.dateIn) ||
+        (dateArray[0] <= dateRange.dateOut &&
+          dateArray[1] >= dateRange.dateIn)
+      ) {
         available = false;
       } else if (dateArray[1] <= dateArray[0]) {
         available = false;
@@ -93,13 +100,14 @@ class item {
     if (!window.userName) {
       window.userName = window.localStorage.getItem("userName");
     }
-    if (
-      this.available === true
-    ) {
+    if (this.available === true) {
       item.button = `<a onclick="window.item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
-    } else if (window.userName === this.Log[0].by && this.available === false) {
+    } else if (
+      window.userName === this.Log[0].by &&
+      this.available === false
+    ) {
       item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
@@ -113,9 +121,9 @@ class item {
   <div class="card">
     <div class="card-image">
       ${
-      !itemPhoto
-        ? `<div class="blue lighten-2 display"></div>`
-        : itemPhoto
+        !itemPhoto
+          ? `<div class="blue lighten-2 display"></div>`
+          : itemPhoto
       }
       <span class="card-title title">${this.brand} ${this.type}</span>
       ${item.button}
@@ -126,17 +134,21 @@ class item {
 
     <div class="card-action">
       ${
-      !this.available
-        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-        this.Log[0].by
-        } ${new Date(this.Log[0].dateOut).toLocaleDateString()} - ${new Date(this.Log[0].dateIn).toLocaleDateString()}</div>`
-        : `<div class="chip activator pointer">@ ${this.location}</div>`
+        !this.available
+          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+              this.Log[0].by
+            } ${new Date(
+              this.Log[0].dateOut
+            ).toLocaleDateString()} - ${new Date(
+              this.Log[0].dateIn
+            ).toLocaleDateString()}</div>`
+          : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-      } Log
+    } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -165,12 +177,11 @@ class item {
         }, 100);
       }
     }, 100);
-
   }
 
   readLog() {
     let content = "";
-    this.Log.forEach(function (item) {
+    this.Log.forEach(function(item) {
       if (item.dateOut && item.dateIn) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
@@ -192,18 +203,21 @@ class item {
   }
 
   reserve(user) {
-
     if (this.available) {
-      let dateOut = Date.parse(document.getElementById('dateOut').value);
-      if (isNaN(dateOut)) { dateOut = Date.now() };
-      let dateIn = Date.parse(document.getElementById('dateIn').value);
+      let dateOut = Date.parse(document.getElementById("dateOut").value);
+      if (isNaN(dateOut)) {
+        dateOut = Date.now();
+      }
+      let dateIn = Date.parse(document.getElementById("dateIn").value);
       let tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 360);
-      if (isNaN(dateIn)) { dateIn = Date.parse(tomorrow) };
+      if (isNaN(dateIn)) {
+        dateIn = Date.parse(tomorrow);
+      }
       let reservation = {
         by: user || window.userName,
         dateOut: dateOut,
-        dateIn: dateIn,
+        dateIn: dateIn
       };
       this.Log.unshift(reservation);
       this.cardRender();
@@ -211,40 +225,40 @@ class item {
     }
   }
 
-
-
   checkOut(user) {
-    let dateOut = Date.parse(document.getElementById('dateOut').value);
-    if (isNaN(dateOut)) { dateOut = Date.now() };
+    let dateOut = Date.parse(document.getElementById("dateOut").value);
+    if (isNaN(dateOut)) {
+      dateOut = Date.now();
+    }
     let checkOut = {
       by: user || window.userName,
-      dateOut: dateOut,
+      dateOut: dateOut
     };
     this.Log.unshift(checkOut);
     this.cardRender();
   }
 
   checkIn(user) {
-    let dateIn = Date.parse(document.getElementById('dateIn').value);
-    if (isNaN(dateIn)) { dateIn = Date.now() };
+    let dateIn = Date.parse(document.getElementById("dateIn").value);
+    if (isNaN(dateIn)) {
+      dateIn = Date.now();
+    }
     let checkIn = {
       by: user || window.userName,
-      dateIn: dateIn,
+      dateIn: dateIn
     };
     this.Log.unshift(checkIn);
     this.cardRender();
   }
 }
 
-const refreshItems = function () {
-
+const refreshItems = function() {
   AllItems.forEach(item => {
-    item.cardRender()
+    item.cardRender();
   });
-}
+};
 
-const buildItems = function () {
-
+const buildItems = function() {
   let listDiv = document.getElementById("list");
 
   let productionCameraContent = ``;
@@ -283,8 +297,7 @@ const buildItems = function () {
     transportBikeContent +
     transportVehicleContent +
     productionCameraContent;
-}
-
+};
 
 let People = new Set();
 class person {
@@ -295,7 +308,7 @@ class person {
 }
 
 // Populate People
-(function (window) {
+(function(window) {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -355,7 +368,7 @@ class person {
 })(window);
 
 // Populate Equipment
-const populateItems = function () {
+const populateItems = function() {
   let equipmentList = [
     ["DJI", "Phantom 3 4K Drone", "Camera", "Naturum Loft", 1],
     ["Nikon", "Keymission 360", "Camera", "Naturum Loft", 1],
@@ -401,7 +414,7 @@ const populateItems = function () {
   window.item["Nikon1"].reserve("Daniel Åberg");
   window.item["Opel3"].reserve("Daniel Åberg");
   let uploads = [];
-  AllItems.forEach(function (item) {
+  AllItems.forEach(function(item) {
     clientPromise.then(client => {
       const db = client
         .service("mongodb", "mongodb-atlas")
@@ -415,28 +428,28 @@ const populateItems = function () {
     });
   });
   console.log("[Uploaded]", uploads);
-}
+};
 
 populateItems();
 
 // Navbar
-(function (window, document) {
-  document.getElementById('header').classList.remove('hide');
-  let dateOut = document.getElementById('dateOut')
-  let dateIn = document.getElementById('dateIn')
+(function(window, document) {
+  document.getElementById("header").classList.remove("hide");
+  let dateOut = document.getElementById("dateOut");
+  let dateIn = document.getElementById("dateIn");
   let M = require("./../../node_modules/materialize-css/dist/js/materialize");
   let today = new Date();
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   let options1 = {
-    format: 'ddd mmm dd yyyy',
+    format: "ddd mmm dd yyyy",
     minDate: today,
-    container: 'body'
+    container: "body"
   };
   let options2 = {
-    format: 'ddd mmm dd yyyy',
+    format: "ddd mmm dd yyyy",
     minDate: tomorrow,
-    container: 'body'
+    container: "body"
   };
   let instance1 = M.Datepicker.init(dateOut, options1);
   let instance2 = M.Datepicker.init(dateIn, options2);
@@ -444,8 +457,18 @@ populateItems();
   dateIn.value = tomorrow.toDateString();
   instance1.setDate(new Date(today));
   instance2.setDate(new Date(tomorrow));
-  dateOut.addEventListener('change', () => { refreshItems() }, false);
-  dateIn.addEventListener('change', () => { refreshItems() }, false);
+  dateOut.addEventListener(
+    "change",
+    () => {
+      refreshItems();
+    },
+    false
+  );
+  dateIn.addEventListener(
+    "change",
+    () => {
+      refreshItems();
+    },
+    false
+  );
 })(window, document);
-
-
