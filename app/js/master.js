@@ -480,7 +480,12 @@ const findItems = function() {
           .execute()
       )
       .then(foundItems => {
-        if (window.foundItems != foundItems) {
+        const a = window.foundItems || foundItems;
+        const b = foundItems;
+        const b1 = new Set(b);
+        const difference = [...new Set([...a].filter(x => !b1.has(x)))];
+        console.log("[Difference]", difference);
+        if ((difference.length = 0 || !window.foundItems)) {
           window.foundItems = foundItems;
           console.log("[Found Items]", foundItems);
 
