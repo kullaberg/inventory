@@ -473,8 +473,12 @@ const findItems = function() {
             foundItems[i].Log
           );
         }
-        window.item = item;
-        buildItems();
+        if (!window.item) {
+          window.item = item;
+          buildItems();
+        } else {
+          refreshItems();
+        }
       });
   });
 };
@@ -521,3 +525,10 @@ findItems();
     false
   );
 })(window, document);
+
+setInterval(function() {
+  // body
+  if (document.hasFocus()) {
+    findItems();
+  }
+}, 15000);
