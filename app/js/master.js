@@ -115,6 +115,12 @@ class item {
       <i class="material-icons large">lock</i>
     </a>`;
     }
+    let dateOut = new Date(
+      parseInt(this.Log[0].dateOut)
+    ).toLocaleDateString();
+    let dateIn = new Date(
+      parseInt(this.Log[0].dateIn)
+    ).toLocaleDateString();
 
     let htmlContent = `<div id="${itemName}" class="col s12 m6 l3">
   <div class="card">
@@ -136,11 +142,7 @@ class item {
         !this.available
           ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
               this.Log[0].by
-            } ${new Date(
-              this.Log[0].dateOut
-            ).toLocaleDateString()} - ${new Date(
-              this.Log[0].dateIn
-            ).toLocaleDateString()}</div>`
+            } ${dateOut} - ${dateIn}</div>`
           : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
@@ -181,6 +183,8 @@ class item {
   readLog() {
     let content = "";
     this.Log.forEach(function(item) {
+      let dateOut = new Date(parseInt(item.dateOut)).toLocaleDateString();
+      let dateIn = new Date(parseInt(item.dateIn)).toLocaleDateString();
       if (item.dateOut && item.dateIn) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
@@ -191,11 +195,7 @@ class item {
         content +=
           '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add_circle</i> ';
       }
-      content += `${item.by} ${new Date(
-        item.dateOut
-      ).toLocaleDateString()} - ${new Date(
-        item.dateIn
-      ).toLocaleDateString()} </div>
+      content += `${item.by} ${dateOut} - ${dateIn} </div>
       `;
     });
     return content;
@@ -224,7 +224,16 @@ class item {
         const db = client
           .service("mongodb", "mongodb-atlas")
           .db("Populate");
-        client.login().then(() => db.collection("Items").updateOne(this));
+        client
+          .login()
+          .then(() =>
+            db
+              .collection("Items")
+              .updateOne({ _id: this._id }, { $set: { Log: this.Log } })
+          )
+          .then(result => {
+            console.log("[Updated]", result);
+          });
       });
     }
   }
@@ -445,6 +454,7 @@ const findItems = function() {
         db
           .collection("Items")
           .find()
+          .sort({ type: 1 })
           .execute()
       )
       .then(foundItems => {
