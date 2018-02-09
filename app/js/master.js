@@ -36,7 +36,6 @@ class item {
     this.idNumber = itemParams[4];
     this.Log = log;
     this._id = `${this.brand}${this.idNumber}`;
-
     AllItems.add(this);
   }
 
@@ -221,7 +220,12 @@ class item {
       };
       this.Log.unshift(reservation);
       this.cardRender();
-    } else {
+      clientPromise.then(client => {
+        const db = client
+          .service("mongodb", "mongodb-atlas")
+          .db("Populate");
+        client.login().then(() => db.collection("Items").updateOne(this));
+      });
     }
   }
 
@@ -321,7 +325,7 @@ class person {
           .execute()
       )
       .then(docs => {
-        console.log("Found docs", docs[0]);
+        console.log("[Found People]", docs[0]);
         console.log("[MongoDB Stitch] Connected to Stitch");
         window.userName = window.localStorage.getItem("userName");
 
@@ -430,7 +434,42 @@ const populateItems = function() {
   console.log("[Uploaded]", uploads);
 };
 
-populateItems();
+// populateItems();
+
+const findItems = function() {
+  clientPromise.then(client => {
+    const db = client.service("mongodb", "mongodb-atlas").db("Populate");
+    client
+      .login()
+      .then(() =>
+        db
+          .collection("Items")
+          .find()
+          .execute()
+      )
+      .then(foundItems => {
+        console.log("[Found Items]", foundItems);
+
+        for (let i in foundItems) {
+          let name = foundItems[i]["_id"];
+          item[name] = new item(
+            [
+              foundItems[i].brand,
+              foundItems[i].model,
+              foundItems[i].type,
+              foundItems[i].location,
+              foundItems[i].idNumber
+            ],
+            foundItems[i].Log
+          );
+        }
+        window.item = item;
+        buildItems();
+      });
+  });
+};
+
+findItems();
 
 // Navbar
 (function(window, document) {
