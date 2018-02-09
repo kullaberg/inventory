@@ -166,7 +166,7 @@ class item {
           domButton.classList.add("scale-in");
         }, 100);
       }
-    }, 100);
+    }, 80);
   }
 
   readLog() {
@@ -408,7 +408,7 @@ const findItems = function () {
         const b = JSON.stringify(foundItems);
         const same = Object.is(a, b);
         if (same === false || !window.foundItems) {
-          console.log("[Difference]", window.same);
+          console.log("[Difference]", same);
           window.foundItems = foundItems;
           console.log("[Found Items]", foundItems);
           AllItems.clear();
