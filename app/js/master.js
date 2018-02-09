@@ -480,37 +480,37 @@ const findItems = function() {
           .execute()
       )
       .then(foundItems => {
-        const a = window.foundItems || foundItems;
-        const b = foundItems;
-        const b1 = new Set(b);
-        const difference = [...new Set([...a].filter(x => !b1.has(x)))];
-        if (difference.length > 0 || !window.foundItems) {
-          console.log("[Difference]", difference);
-          window.foundItems = foundItems;
-          console.log("[Found Items]", foundItems);
+        // const a = window.foundItems || foundItems;
+        // const b = foundItems;
+        // const b1 = new Set(b);
+        // window.difference = [...new Set([...a].filter(x => !b1.has(x)))];
+        // if (window.difference.length > 0 || !window.foundItems) {
+        //   console.log("[Difference]", difference);
+        //   window.foundItems = foundItems;
+        console.log("[Found Items]", foundItems);
 
-          for (let i in foundItems) {
-            let name = foundItems[i]["_id"];
-            item[name] = new item(
-              [
-                foundItems[i].brand,
-                foundItems[i].model,
-                foundItems[i].type,
-                foundItems[i].location,
-                foundItems[i].idNumber
-              ],
-              foundItems[i].Log
-            );
-          }
-          if (!window.item) {
-            window.item = item;
-            buildItems();
-          } else {
-            refreshItems();
-          }
-        } else {
-          console.log("[No changes]");
+        for (let i in foundItems) {
+          let name = foundItems[i]["_id"];
+          item[name] = new item(
+            [
+              foundItems[i].brand,
+              foundItems[i].model,
+              foundItems[i].type,
+              foundItems[i].location,
+              foundItems[i].idNumber
+            ],
+            foundItems[i].Log
+          );
         }
+        if (!window.item) {
+          window.item = item;
+          buildItems();
+        } else {
+          refreshItems();
+        }
+        // } else {
+        //   console.log("[No changes]");
+        // }
       });
   });
 };
@@ -565,4 +565,4 @@ setInterval(function() {
   if (document.hasFocus()) {
     findItems();
   }
-}, 15000);
+}, 10000);
