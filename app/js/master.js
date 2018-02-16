@@ -1,13 +1,16 @@
-let AllItems = new Set();
+const M = require("./../../node_modules/materialize-css/dist/js/materialize");
+
+const AllItems = new Set();
 
 // MongoDB
 
 const stitch = require("mongodb-stitch");
+
 const clientPromise = stitch.StitchClientFactory.create(
   "inventorykstitch-cwlil"
 );
 
-class item {
+class Item {
   constructor(
     itemParams = ["Name", "Model", "Type", "Location", 1],
     log = [
@@ -36,31 +39,39 @@ class item {
   }
 
   photo() {
+    let photo = ``;
     switch (this.type) {
       case "Vehicle":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_car</i></div>`;
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_car</i></div>`;
+        break;
       case "Bike":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_bike</i></div>`;
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">directions_bike</i></div>`;
+        break;
       case "Bed":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">hotel</i></div>`;
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">hotel</i></div>`;
+        break;
       case "Room":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">forum</i></div>`;
+        break;
       case "Office":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">work</i></div>`;
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">work</i></div>`;
+        break;
       case "Camera":
-        return `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
-
+        photo = `<div class="blue lighten-2 display"><i class="material-icons typeIcons medium white-text">photo_camera</i></div>`;
+        break;
       default:
+        photo = ``;
         break;
     }
+    return photo;
   }
 
   get available() {
-    let dateArray = [
+    const dateArray = [
       Date.parse(document.getElementById("dateOut").value),
       Date.parse(document.getElementById("dateIn").value)
     ];
-    let reservationsArray = this.Log;
+    const reservationsArray = this.Log;
 
     let available = true;
     reservationsArray.forEach(dateRange => {
@@ -69,8 +80,7 @@ class item {
           dateArray[0] <= dateRange.dateIn) ||
         (dateArray[1] >= dateRange.dateOut &&
           dateArray[1] <= dateRange.dateIn) ||
-        (dateArray[0] <= dateRange.dateOut &&
-          dateArray[1] >= dateRange.dateIn)
+        (dateArray[0] <= dateRange.dateOut && dateArray[1] >= dateRange.dateIn)
       ) {
         available = false;
       } else if (dateArray[1] <= dateArray[0]) {
@@ -81,46 +91,39 @@ class item {
   }
 
   cardHtml() {
-    let item = {};
-    let itemName = this.name();
-    let itemPhoto = this.photo();
-    let itemDescription = this.description();
+    let button = ``;
+    const itemName = this.name();
+    const itemPhoto = this.photo();
+    const itemDescription = this.description();
     if (!window.userName) {
       window.userName = window.localStorage.getItem("userName");
     }
     if (this.available === true) {
-      item.button = `<a onclick="window.item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
+      button = `<a onclick="window.Item['${itemName}'].reserve()" id="button${itemName}" class="btn-floating btn-large halfway-fab waves-effect waves-light purple lighten-1 scale-transition">
       <i class="material-icons large">assignment</i>
     </a> `;
-    } else if (
-      window.userName === this.Log[0].by &&
-      this.available === false
-    ) {
-      item.button = `<a id="button${itemName}" onclick="window.item['${itemName}'].removeRecord()" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
+    } else if (window.userName === this.Log[0].by && this.available === false) {
+      button = `<a id="button${itemName}" onclick="window.Item['${itemName}'].removeRecord()" class="btn-floating btn-large halfway-fab purple lighten-4 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     } else {
-      item.button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled lighten-2 scale-transition">
+      button = `<a id="button${itemName}" class="btn-floating btn-large halfway-fab disabled lighten-2 scale-transition">
       <i class="material-icons large">lock</i>
     </a>`;
     }
-    let dateOut = new Date(
-      parseInt(this.Log[0].dateOut)
+    const dateOut = new Date(
+      parseInt(this.Log[0].dateOut, 10)
     ).toLocaleDateString();
-    let dateIn = new Date(
-      parseInt(this.Log[0].dateIn)
+    const dateIn = new Date(
+      parseInt(this.Log[0].dateIn, 10)
     ).toLocaleDateString();
 
-    let htmlContent = `<div id="${itemName}" class="col s12 m6 l3">
+    const htmlContent = `<div id="${itemName}" class="col s12 m6 l3">
   <div class="card">
     <div class="card-image">
-      ${
-      !itemPhoto
-        ? `<div class="blue lighten-2 display"></div>`
-        : itemPhoto
-      }
+      ${!itemPhoto ? `<div class="blue lighten-2 display"></div>` : itemPhoto}
       <span class="card-title title">${this.brand} ${this.type}</span>
-      ${item.button}
+      ${button}
     </div>
     <div class="card-content grey-text text-lighten description">
       <p>${itemDescription}</p>
@@ -128,17 +131,17 @@ class item {
 
     <div class="card-action">
       ${
-      !this.available
-        ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
-        this.Log[0].by
-        } ${dateOut} - ${dateIn}</div>`
-        : `<div class="chip activator pointer">@ ${this.location}</div>`
+        !this.available
+          ? `<div class="chip activator pointer"><i class="material-icons checks ">assignment_ind</i> ${
+              this.Log[0].by
+            } ${dateOut} - ${dateIn}</div>`
+          : `<div class="chip activator pointer">@ ${this.location}</div>`
       }
     </div>
     <div class="card-reveal white">
       <span class="card-title grey-text lighten-4">${this.brand} ${
       this.type
-      } Log
+    } Log
         <i class="material-icons right">close</i>
       </span>
       <p>${this.readLog()}</p>
@@ -151,16 +154,16 @@ class item {
   }
 
   cardRender() {
-    let itemName = this.name();
-    let domButton = document.getElementById("button" + itemName);
+    const itemName = this.name();
+    let domButton = document.getElementById(`button${itemName}`);
     domButton.classList.remove("scale-out");
     domButton.classList.remove("scale-in");
     domButton.classList.add("scale-out");
-    let domElement = document.getElementById(itemName);
+    const domElement = document.getElementById(itemName);
     setTimeout(() => {
       if (domElement.outerHTML.length > 3) {
         domElement.outerHTML = this.cardHtml();
-        let domButton = document.getElementById("button" + itemName);
+        domButton = document.getElementById(`button${itemName}`);
         domButton.classList.add("scale-out");
         setTimeout(() => {
           domButton.classList.add("scale-in");
@@ -171,20 +174,22 @@ class item {
 
   readLog() {
     let content = "";
-    this.Log.forEach(function (item) {
-      let dateOut = new Date(parseInt(item.dateOut)).toLocaleDateString();
-      let dateIn = new Date(parseInt(item.dateIn)).toLocaleDateString();
-      if (item.dateOut && item.dateIn) {
+    this.Log.forEach(entry => {
+      const dateOut = new Date(
+        parseInt(entry.dateOut, 10)
+      ).toLocaleDateString();
+      const dateIn = new Date(parseInt(entry.dateIn, 10)).toLocaleDateString();
+      if (entry.dateOut && entry.dateIn) {
         content +=
           '<div class="chip purple lighten-2 white-text"><i class="material-icons checks">assignment</i> ';
-      } else if (!item.dateOut) {
+      } else if (!entry.dateOut) {
         content +=
           '<div class="chip orange lighten-2 white-text"><i class="material-icons checks">assignment_turned_in</i> ';
-      } else if (item.by === "Initial Log Record") {
+      } else if (entry.by === "Initial Log Record") {
         content +=
           '<div class="chip blue lighten-2 white-text"><i class="material-icons checks">add_circle</i> ';
       }
-      content += `${item.by} ${dateOut} - ${dateIn} </div>
+      content += `${entry.by} ${dateOut} - ${dateIn} </div>
       `;
     });
     return content;
@@ -193,48 +198,46 @@ class item {
   reserve(user) {
     if (this.available) {
       let dateOut = Date.parse(document.getElementById("dateOut").value);
-      if (isNaN(dateOut)) {
+      if (Number.isNaN(dateOut)) {
         dateOut = Date.now();
       }
       let dateIn = Date.parse(document.getElementById("dateIn").value);
-      let tomorrow = new Date();
+      const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 360);
-      if (isNaN(dateIn)) {
+      if (Number.isNaN(dateIn)) {
         dateIn = Date.parse(tomorrow);
       }
-      let reservation = {
+      const reservation = {
         by: user || window.userName,
-        dateOut: dateOut,
-        dateIn: dateIn
+        dateOut,
+        dateIn
       };
       this.Log.unshift(reservation);
       this.cardRender();
       clientPromise.then(client => {
-        const db = client
-          .service("mongodb", "mongodb-atlas")
-          .db("Populate");
+        const db = client.service("mongodb", "mongodb-atlas").db("Populate");
         client
           .login()
           .then(() =>
             db
               .collection("Items")
               .updateOne({ _id: this._id }, { $set: { Log: this.Log } })
-          )
-          .then(result => {
-            console.log("[Updated]", result);
-          });
+          );
+        // .then(result => {
+        //   console.log("[Updated]", result);
+        // });
       });
     }
   }
 
   checkOut(user) {
     let dateOut = Date.parse(document.getElementById("dateOut").value);
-    if (isNaN(dateOut)) {
+    if (Number.isNaN(dateOut)) {
       dateOut = Date.now();
     }
-    let checkOut = {
+    const checkOut = {
       by: user || window.userName,
-      dateOut: dateOut
+      dateOut
     };
     this.Log.unshift(checkOut);
     this.cardRender();
@@ -242,12 +245,12 @@ class item {
 
   checkIn(user) {
     let dateIn = Date.parse(document.getElementById("dateIn").value);
-    if (isNaN(dateIn)) {
+    if (Number.isNaN(dateIn)) {
       dateIn = Date.now();
     }
-    let checkIn = {
+    const checkIn = {
       by: user || window.userName,
-      dateIn: dateIn
+      dateIn
     };
     this.Log.unshift(checkIn);
     this.cardRender();
@@ -257,9 +260,7 @@ class item {
     if (this.Log[0].by === window.userName) {
       this.Log.shift();
       clientPromise.then(client => {
-        const db = client
-          .service("mongodb", "mongodb-atlas")
-          .db("Populate");
+        const db = client.service("mongodb", "mongodb-atlas").db("Populate");
         client
           .login()
           .then(() =>
@@ -267,8 +268,8 @@ class item {
               .collection("Items")
               .updateOne({ _id: this._id }, { $set: { Log: this.Log } })
           )
-          .then(result => {
-            console.log("[Removed]", result);
+          .then(() => {
+            // console.log("[Removed]", result);
             this.cardRender();
           });
       });
@@ -276,39 +277,39 @@ class item {
   }
 }
 
-const refreshItems = function () {
-  AllItems.forEach(item => {
-    item.cardRender();
+const refreshItems = function refreshItems() {
+  AllItems.forEach(card => {
+    card.cardRender();
   });
 };
 
-const buildItems = function () {
-  let listDiv = document.getElementById("list");
+const buildItems = function populateItems() {
+  const listDiv = document.getElementById("list");
 
   let productionCameraContent = ``;
   let spacesBedContent = ``;
   let spacesRoomContent = ``;
   let transportBikeContent = ``;
   let transportVehicleContent = ``;
-  AllItems.forEach(item => {
-    switch (item.type) {
+  AllItems.forEach(resource => {
+    switch (resource.type) {
       case "Bike":
-        transportBikeContent += item.cardHtml();
+        transportBikeContent += resource.cardHtml();
         break;
       case "Bed":
-        spacesBedContent += item.cardHtml();
+        spacesBedContent += resource.cardHtml();
         break;
       case "Vehicle":
-        transportVehicleContent += item.cardHtml();
+        transportVehicleContent += resource.cardHtml();
         break;
       case "Room":
-        spacesRoomContent += item.cardHtml();
+        spacesRoomContent += resource.cardHtml();
         break;
       case "Camera":
-        productionCameraContent += item.cardHtml();
+        productionCameraContent += resource.cardHtml();
         break;
       case "Office":
-        spacesRoomContent += item.cardHtml();
+        spacesRoomContent += resource.cardHtml();
         break;
 
       default:
@@ -323,8 +324,8 @@ const buildItems = function () {
     productionCameraContent;
 };
 
-let People = new Set();
-class person {
+const People = new Set();
+class Person {
   constructor(name) {
     this.name = name;
     People.add(this);
@@ -332,7 +333,7 @@ class person {
 }
 
 // Populate People
-(function (window) {
+(function populatePeople() {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -346,7 +347,9 @@ class person {
       )
       .then(docs => {
         // console.log("[Found People]", docs[0]);
-        window.userName = window.localStorage.getItem("userName");
+        if (window.localStorage.length > 0) {
+          window.userName = window.localStorage.getItem("userName");
+        }
 
         let nameFound = docs[0].peopleList.includes(window.userName);
         // let nameFound = true;
@@ -361,15 +364,15 @@ class person {
             window.localStorage.setItem("userName", window.userName);
           }
         }
-
-        for (let i in docs[0].peopleList) {
-          let name = docs[0].peopleList[i];
-          person[name] = new person(docs[0].peopleList[i]);
+        const peopleListKeys = Object.keys(docs[0].peopleList);
+        for (const i of peopleListKeys) {
+          const name = docs[0].peopleList[i];
+          Person[name] = new Person(docs[0].peopleList[i]);
         }
-      })
-      .catch(err => {
-        console.error(err);
       });
+    // .catch(err => {
+    //   console.error(err);
+    // })
   });
 
   // let peopleList = [
@@ -388,9 +391,9 @@ class person {
   //   "Helen Thorn Jönsson",
   //   "Freddy Kristensson"
   // ];
-})(window);
+})();
 
-const findItems = function () {
+const findItems = function findItems() {
   clientPromise.then(client => {
     const db = client.service("mongodb", "mongodb-atlas").db("Populate");
     client
@@ -406,26 +409,30 @@ const findItems = function () {
         const a = window.a || JSON.stringify(foundItems).length;
         const b = JSON.stringify(foundItems).length;
         const same = Object.is(a, b);
-        console.log("[Similar]", same);
+        // console.log("[Similar]", same);
         if (same === false || !window.a) {
           window.a = a;
           // console.log("[Found Items]", foundItems);
           AllItems.clear();
-          for (let i in foundItems) {
-            let name = foundItems[i]["_id"];
-            item[name] = new item(
-              [
-                foundItems[i].brand,
-                foundItems[i].model,
-                foundItems[i].type,
-                foundItems[i].location,
-                foundItems[i].idNumber
-              ],
-              foundItems[i].Log
-            );
+
+          const itemsFound = Object.keys(foundItems);
+          for (const i of itemsFound) {
+            if (foundItems.hasOwnProperty(i)) {
+              const name = foundItems[i]._id;
+              Item[name] = new Item(
+                [
+                  foundItems[i].brand,
+                  foundItems[i].model,
+                  foundItems[i].type,
+                  foundItems[i].location,
+                  foundItems[i].idNumber
+                ],
+                foundItems[i].Log
+              );
+            }
           }
           // if (!window.item) {
-          window.item = item;
+          window.Item = Item;
           buildItems();
           // } else {
           //   refreshItems();
@@ -435,29 +442,27 @@ const findItems = function () {
   });
 };
 
-findItems();
-
 // Navbar
-(function (window, document) {
+(function makeNavbar(window, document) {
   document.getElementById("header").classList.remove("hide");
-  let dateOut = document.getElementById("dateOut");
-  let dateIn = document.getElementById("dateIn");
-  let M = require("./../../node_modules/materialize-css/dist/js/materialize");
-  let today = new Date();
-  let tomorrow = new Date();
+  const dateOut = document.getElementById("dateOut");
+  const dateIn = document.getElementById("dateIn");
+
+  const today = new Date();
+  const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  let options1 = {
+  const options1 = {
     format: "ddd mmm dd yyyy",
     minDate: today,
     container: "body"
   };
-  let options2 = {
+  const options2 = {
     format: "ddd mmm dd yyyy",
     minDate: tomorrow,
     container: "body"
   };
-  let instance1 = M.Datepicker.init(dateOut, options1);
-  let instance2 = M.Datepicker.init(dateIn, options2);
+  const instance1 = M.Datepicker.init(dateOut, options1);
+  const instance2 = M.Datepicker.init(dateIn, options2);
   dateOut.value = today.toDateString();
   dateIn.value = tomorrow.toDateString();
   instance1.setDate(new Date(today));
@@ -480,7 +485,7 @@ findItems();
 
 document.addEventListener("focus", () => findItems(), false);
 
-setInterval(function () {
+setInterval(() => {
   // body
   // if (document.hasFocus()) {
   findItems();
