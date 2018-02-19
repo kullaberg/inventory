@@ -417,19 +417,17 @@ const findItems = function findItems() {
 
           const itemsFound = Object.keys(foundItems);
           for (const i of itemsFound) {
-            if (foundItems.hasOwnProperty(i)) {
-              const name = foundItems[i]._id;
-              Item[name] = new Item(
-                [
-                  foundItems[i].brand,
-                  foundItems[i].model,
-                  foundItems[i].type,
-                  foundItems[i].location,
-                  foundItems[i].idNumber
-                ],
-                foundItems[i].Log
-              );
-            }
+            const name = foundItems[i]._id;
+            Item[name] = new Item(
+              [
+                foundItems[i].brand,
+                foundItems[i].model,
+                foundItems[i].type,
+                foundItems[i].location,
+                foundItems[i].idNumber
+              ],
+              foundItems[i].Log
+            );
           }
           // if (!window.item) {
           window.Item = Item;
@@ -483,7 +481,7 @@ const findItems = function findItems() {
   );
 })(window, document);
 
-document.addEventListener("focus", () => findItems(), false);
+document.addEventListener("focusin", () => findItems(), false);
 
 setInterval(() => {
   // body

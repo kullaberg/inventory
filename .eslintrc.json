@@ -12,14 +12,18 @@
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "no-const-assign": "warn",
     "no-this-before-super": "warn",
     "no-undef": "warn",
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
     "constructor-super": "warn",
-    "valid-typeof": "warn"
+    "valid-typeof": "warn",
+    "no-underscore-dangle": "off",
+    "no-restricted-syntax": "off",
+    "no-alert": "off",
+    "prefer-destructuring": "off"
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended"]
 }
