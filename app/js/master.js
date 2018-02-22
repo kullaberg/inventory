@@ -82,6 +82,7 @@ class Item {
           dateArray[1] <= dateRange.dateIn) ||
         (dateArray[0] <= dateRange.dateOut && dateArray[1] >= dateRange.dateIn)
       ) {
+        
         available = false;
       } else if (dateArray[1] <= dateArray[0]) {
         available = false;
