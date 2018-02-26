@@ -3,9 +3,9 @@ var __wpo = {
     "main": [
       "./img/MaterialIcons-Regular.eot?e79bfd88537def476913f3ed52f4f4b3",
       "./img/MaterialIcons-Regular.ttf?a37b0c01c0baf1888ca812cc0508f6e2",
-      "./js/entry.js?7ffaec6b480685437084",
-      "./js/vendor.js?0c8a975b7b30367fcce3",
-      "./js/manifest.js?0debf60345f43dcee215",
+      "./js/entry.js?f14454bd015664043729",
+      "./js/vendor.js?957412312c6e5383d2a0",
+      "./js/manifest.js?05a86d58108d235613ba",
       "./"
     ],
     "additional": [],
@@ -15,14 +15,14 @@ var __wpo = {
   "hashesMap": {
     "26fb8cecb5512223277b4d290a24492a0f09ede1": "./img/MaterialIcons-Regular.eot?e79bfd88537def476913f3ed52f4f4b3",
     "fc05de31234e0090f7ddc28ce1b23af4026cb1da": "./img/MaterialIcons-Regular.ttf?a37b0c01c0baf1888ca812cc0508f6e2",
-    "038cb61f20c3b11b3e35a596a6e97af43b6447b5": "./js/entry.js?7ffaec6b480685437084",
-    "8c9587316df35d0632a088842232647e09ab5b17": "./js/vendor.js?0c8a975b7b30367fcce3",
-    "5fff6f4683062142d3a82c050b69b9533d03a3f6": "./js/manifest.js?0debf60345f43dcee215",
-    "9fc33058674a2802fd6f02f898f0096c29907275": "./"
+    "bcc99a3f51629fcc7efd5beeed1f899f36c4758b": "./js/entry.js?f14454bd015664043729",
+    "86ac17d35c4a4ddc137d48e3f71e0568b3d770be": "./js/vendor.js?957412312c6e5383d2a0",
+    "7ffc10453e85de358a4682a1b9959b91eeca57a9": "./js/manifest.js?05a86d58108d235613ba",
+    "0596619429c11a564076ccfdee473ef5712ab6d5": "./"
   },
   "strategy": "all",
   "responseStrategy": "network-first",
-  "version": "2018-2-7 15:59:05",
+  "version": "2018-2-26 09:34:26",
   "name": "webpack-offline",
   "pluginVersion": "4.9.0",
   "relativePaths": true
