@@ -1,0 +1,14 @@
+CACHE MANIFEST
+#ver:2018-3-1 09:09:51
+#plugin:4.9.0
+
+CACHE:
+../img/MaterialIcons-Regular.eot?e79bfd88537def476913f3ed52f4f4b3
+../img/MaterialIcons-Regular.ttf?a37b0c01c0baf1888ca812cc0508f6e2
+../js/entry.js?92ee6eabb7f367d9b93f
+../js/vendor.js?fb37cf83b9531faf50b3
+../js/manifest.js?05a86d58108d235613ba
+../
+
+NETWORK:
+*
