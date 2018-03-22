@@ -24,4 +24,4 @@ A return is performed by clicking or tapping the orange button.
 
 A log is kept for each individual item and can be viewed by clicking on
 the grey chip that shows either the location of the item or the name of
-the person that has checked the item out.
+the person that has checked the item out. 
